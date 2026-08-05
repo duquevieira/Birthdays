@@ -122,7 +122,7 @@
 
       h1 {
         max-width: 390px;
-        margin: 0 auto;
+        margin: 0 auto 20px;
         font-family: "Playfair Display", Georgia, serif;
         font-size: clamp(2.35rem, 11vw, 4.2rem);
         line-height: 0.94;
@@ -133,15 +133,6 @@
       h1 em {
         color: var(--berry);
         font-weight: 700;
-      }
-
-      .intro {
-        max-width: 330px;
-        margin: 13px auto 20px;
-        color: var(--muted);
-        font-size: 0.95rem;
-        line-height: 1.5;
-        text-align: center;
       }
 
       .game-card {
@@ -451,8 +442,7 @@
       @media (max-height: 720px) and (orientation: portrait) {
         .page-shell { padding-top: 12px; padding-bottom: 14px; }
         .eyebrow { margin-bottom: 5px; }
-        h1 { font-size: 2.2rem; }
-        .intro { margin: 7px auto 11px; font-size: 0.84rem; }
+        h1 { margin-bottom: 11px; font-size: 2.2rem; }
         .game-card { padding: 11px; border-radius: 24px; }
         .scoreboard { margin-bottom: 8px; }
         .controls { margin-top: 9px; }
@@ -462,7 +452,7 @@
 
       @media (min-width: 700px) {
         .page-shell { padding-block: 38px; }
-        .intro { margin-bottom: 24px; }
+        h1 { margin-bottom: 24px; }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -485,7 +475,6 @@
       <main>
         <p class="eyebrow">Um dia muito especial</p>
         <h1>Parabéns, <em>Inês!</em></h1>
-        <p class="intro">Esta fotografia esconde uma surpresa. Desliza as peças e completa o puzzle!</p>
 
         <section class="game-card" aria-label="Puzzle de aniversário">
           <div class="scoreboard" aria-live="polite">
