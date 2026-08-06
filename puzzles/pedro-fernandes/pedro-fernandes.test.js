@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { JSDOM } from "jsdom";
 import { afterEach, describe, expect, it } from "vitest";
 
-const PERSON = "Pedro Fernandes";
+const PERSON = "tio Pedro";
 const SLUG = "pedro-fernandes";
 const SIZE = 4;
 const TOTAL = SIZE * SIZE;
