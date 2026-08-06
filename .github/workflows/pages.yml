@@ -60,3 +60,7 @@ jobs:
       - name: Publicar
         id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          # O GitHub Pages tem andado a levar mais de 10 minutos a aceitar a
+          # publicação — que é quanto a acção espera por omissão. Damos-lhe 30.
+          timeout: 1800000
