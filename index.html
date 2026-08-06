@@ -6,6 +6,20 @@
     <meta name="theme-color" content="#fff7ed" />
     <meta name="description" content="Puzzles de aniversário — um para cada pessoa." />
     <link rel="canonical" href="https://duquevieira.github.io/Birthdays/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_PT" />
+    <meta property="og:url" content="https://duquevieira.github.io/Birthdays/" />
+    <meta property="og:title" content="Puzzles de aniversário 🎂" />
+    <meta property="og:description" content="Um puzzle especial para cada pessoa." />
+    <meta property="og:image" content="https://duquevieira.github.io/Birthdays/assets/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Puzzles de aniversário — um puzzle especial para cada pessoa" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Puzzles de aniversário 🎂" />
+    <meta name="twitter:description" content="Um puzzle especial para cada pessoa." />
+    <meta name="twitter:image" content="https://duquevieira.github.io/Birthdays/assets/og-image.jpg" />
     <title>Puzzles de aniversário 🎂</title>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap");
@@ -108,23 +122,48 @@
         outline-offset: 3px;
       }
 
-      .puzzle-name {
+      /* A fotografia de cada pessoa, tirada da pasta do puzzle dela. */
+      .puzzle-photo {
+        flex: 0 0 auto;
+        width: 62px;
+        height: 62px;
+        border: 3px solid rgba(255, 255, 255, 0.95);
+        border-radius: 50%;
+        /* --focus e --zoom aproximam o recorte da cara de cada pessoa. */
+        background-position: var(--focus, 50% 30%);
+        background-repeat: no-repeat;
+        background-size: var(--zoom, cover);
+        box-shadow: 0 6px 16px rgba(108, 50, 65, 0.24);
+      }
+
+      .puzzle-text {
+        display: grid;
         flex: 1;
+        gap: 2px;
+        min-width: 0;
+      }
+
+      .puzzle-name {
         font-family: "Playfair Display", Georgia, serif;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        line-height: 1.1;
         letter-spacing: -0.02em;
       }
 
-      .puzzle-date {
+      .puzzle-kind {
         color: var(--muted);
-        font-size: 0.78rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        font-size: 0.76rem;
       }
 
-      .puzzle-emoji {
-        font-size: 1.6rem;
+      .puzzle-date {
+        flex: 0 0 auto;
+        align-self: center;
+        color: var(--berry);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-align: right;
+        text-transform: uppercase;
       }
 
       footer {
@@ -147,20 +186,39 @@
       <p class="eyebrow">Dias muito especiais</p>
       <h1>Puzzles de aniversário</h1>
 
-      <!-- Um item por pessoa. Cada ligação abre uma página independente. -->
+      <!--
+        Um item por pessoa. Cada ligação abre uma página independente e mostra a
+        fotografia e o texto do puzzle dessa pessoa — a fotografia vem da pasta dela.
+      -->
       <ul class="puzzle-list">
         <li>
           <a class="puzzle-link" href="./puzzles/ines-ferreira/">
-            <span class="puzzle-emoji" aria-hidden="true">🎂</span>
-            <span class="puzzle-name">Inês Ferreira</span>
-            <span class="puzzle-date">5 de agosto</span>
+            <span
+              class="puzzle-photo"
+              style="--focus: 44% 23%; --zoom: 190%; background-image: url('./puzzles/ines-ferreira/assets/photo.jpg')"
+              role="img"
+              aria-label="Fotografia da Inês"
+            ></span>
+            <span class="puzzle-text">
+              <span class="puzzle-name">Inês Ferreira</span>
+              <span class="puzzle-kind">Puzzle deslizante de 9 peças</span>
+            </span>
+            <span class="puzzle-date">5 ago</span>
           </a>
         </li>
         <li>
           <a class="puzzle-link" href="./puzzles/pedro-fernandes/">
-            <span class="puzzle-emoji" aria-hidden="true">👑</span>
-            <span class="puzzle-name">Pedro Fernandes</span>
-            <span class="puzzle-date">6 de agosto</span>
+            <span
+              class="puzzle-photo"
+              style="--focus: 50% 9%; --zoom: 520%; background-image: url('./puzzles/pedro-fernandes/assets/photo.jpg')"
+              role="img"
+              aria-label="Fotografia do Pedro"
+            ></span>
+            <span class="puzzle-text">
+              <span class="puzzle-name">Pedro Fernandes</span>
+              <span class="puzzle-kind">Puzzle de encaixe de 16 peças</span>
+            </span>
+            <span class="puzzle-date">6 ago</span>
           </a>
         </li>
       </ul>

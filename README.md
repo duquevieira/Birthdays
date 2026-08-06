@@ -5,6 +5,11 @@ Cada pessoa tem o seu jogo: uns são puzzles deslizantes, outros são de encaixe
 
 A página inicial ([`index.html`](index.html)) é apenas um índice com as ligações para cada puzzle.
 
+A pré-visualização das ligações (a imagem que o WhatsApp mostra) vive em
+`assets/og-image.jpg` para a página inicial e em `assets/og-image.jpg` dentro da
+pasta de cada pessoa. Os testes verificam que existem e que os cartões `og:`
+apontam para elas por endereço absoluto.
+
 ## Estrutura
 
 Cada puzzle vive numa pasta só sua — o nome da pasta é o nome da pessoa em minúsculas
