@@ -26,7 +26,7 @@ jobs:
       - name: Instalar o Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
       - name: Instalar as dependências
         run: npm ci
