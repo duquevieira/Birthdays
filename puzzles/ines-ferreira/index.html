@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#fff7ed" />
     <meta name="description" content="Um puzzle especial de aniversário para a Inês." />
-    <link rel="canonical" href="https://duquevieira.github.io/Birthdays/" />
+    <link rel="canonical" href="https://duquevieira.github.io/Birthdays/puzzles/ines-ferreira/" />
     <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_PT" />
-    <meta property="og:url" content="https://duquevieira.github.io/Birthdays/" />
+    <meta property="og:url" content="https://duquevieira.github.io/Birthdays/puzzles/ines-ferreira/" />
     <meta property="og:title" content="Parabéns, Inês! 🎂" />
     <meta property="og:description" content="Um puzzle especial de aniversário." />
-    <meta property="og:image" content="https://duquevieira.github.io/Birthdays/assets/og-image.jpg" />
+    <meta property="og:image" content="https://duquevieira.github.io/Birthdays/puzzles/ines-ferreira/assets/og-image.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -20,7 +20,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Parabéns, Inês! 🎂" />
     <meta name="twitter:description" content="Um puzzle especial de aniversário." />
-    <meta name="twitter:image" content="https://duquevieira.github.io/Birthdays/assets/og-image.jpg" />
+    <meta name="twitter:image" content="https://duquevieira.github.io/Birthdays/puzzles/ines-ferreira/assets/og-image.jpg" />
     <title>Parabéns, Inês! 🎂</title>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap");
@@ -228,7 +228,7 @@
         padding: 0;
         border: 0;
         border-radius: clamp(8px, 2.6vw, 14px);
-        background-image: url("./assets/Ines.jpg");
+        background-image: url("./assets/photo.jpg");
         background-repeat: no-repeat;
         background-size: 300% 300%;
         box-shadow: 0 4px 10px rgba(62, 37, 46, 0.2);
@@ -284,7 +284,7 @@
         inset: 0;
         z-index: 4;
         border-radius: 18px;
-        background: url("./assets/Ines.jpg") center / cover no-repeat;
+        background: url("./assets/photo.jpg") center / cover no-repeat;
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
         opacity: 0;
         pointer-events: none;
@@ -538,6 +538,12 @@
       (() => {
         "use strict";
 
+        // Tudo o que muda de puzzle para puzzle vive aqui.
+        const PUZZLE = {
+          name: "Inês",
+          wish: "Que este novo ano seja cheio de sorrisos, aventuras e momentos inesquecíveis.",
+        };
+
         const SIZE = 3;
         const EMPTY = SIZE * SIZE - 1;
         const SHUFFLE_STEPS = 140;
@@ -681,7 +687,7 @@
           solved = true;
           stopTimer();
           renderBoard();
-          celebrationText.textContent = `Completaste o puzzle em ${moves} ${moves === 1 ? "jogada" : "jogadas"} e ${formatTime(seconds)}. Muitos parabéns, Inês! Que este novo ano seja cheio de sorrisos, aventuras e momentos inesquecíveis.`;
+          celebrationText.textContent = `Completaste o puzzle em ${moves} ${moves === 1 ? "jogada" : "jogadas"} e ${formatTime(seconds)}. Muitos parabéns, ${PUZZLE.name}! ${PUZZLE.wish}`;
           announce("Puzzle completo. Parabéns!");
           window.setTimeout(showCelebration, 650);
           playChime();

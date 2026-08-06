@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fff7ed" />
+    <meta name="description" content="Puzzles de aniversário — um para cada pessoa." />
+    <link rel="canonical" href="https://duquevieira.github.io/Birthdays/" />
+    <title>Puzzles de aniversário 🎂</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap");
+
+      :root {
+        --ink: #402c35;
+        --muted: #856d76;
+        --berry: #b7355d;
+        --gold: #f6bc4b;
+        --paper: rgba(255, 255, 255, 0.84);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-height: 100%;
+        background: #f8d9ce;
+      }
+
+      body {
+        display: grid;
+        min-height: 100svh;
+        margin: 0;
+        padding: max(28px, env(safe-area-inset-top)) 18px max(28px, env(safe-area-inset-bottom));
+        place-items: center;
+        color: var(--ink);
+        font-family: "DM Sans", system-ui, sans-serif;
+        background:
+          radial-gradient(circle at 8% 8%, rgba(255, 255, 255, 0.95) 0 5%, transparent 20%),
+          radial-gradient(circle at 92% 18%, rgba(246, 188, 75, 0.24) 0 8%, transparent 27%),
+          linear-gradient(155deg, #fff9ef 0%, #ffe3d8 49%, #f7c9ca 100%);
+      }
+
+      main {
+        width: min(100%, 470px);
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        margin: 0 0 8px;
+        color: var(--berry);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.17em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before,
+      .eyebrow::after {
+        width: 28px;
+        height: 1px;
+        background: currentColor;
+        content: "";
+        opacity: 0.45;
+      }
+
+      h1 {
+        margin: 0 auto 24px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(2.2rem, 10vw, 3.4rem);
+        line-height: 0.98;
+        text-align: center;
+        letter-spacing: -0.045em;
+      }
+
+      .puzzle-list {
+        display: grid;
+        gap: 12px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .puzzle-link {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 16px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 22px;
+        background: var(--paper);
+        box-shadow: 0 16px 44px rgba(108, 50, 65, 0.14);
+        color: inherit;
+        text-decoration: none;
+        transition: transform 130ms ease, box-shadow 130ms ease;
+      }
+
+      .puzzle-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 52px rgba(108, 50, 65, 0.2);
+      }
+
+      .puzzle-link:focus-visible {
+        outline: 3px solid var(--gold);
+        outline-offset: 3px;
+      }
+
+      .puzzle-name {
+        flex: 1;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 1.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .puzzle-date {
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .puzzle-emoji {
+        font-size: 1.6rem;
+      }
+
+      footer {
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: 0.75rem;
+        text-align: center;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Dias muito especiais</p>
+      <h1>Puzzles de aniversário</h1>
+
+      <!-- Um item por pessoa. Cada ligação abre uma página independente. -->
+      <ul class="puzzle-list">
+        <li>
+          <a class="puzzle-link" href="./puzzles/ines-ferreira/">
+            <span class="puzzle-emoji" aria-hidden="true">🎂</span>
+            <span class="puzzle-name">Inês Ferreira</span>
+            <span class="puzzle-date">5 de agosto</span>
+          </a>
+        </li>
+        <li>
+          <a class="puzzle-link" href="./puzzles/pedro-fernandes/">
+            <span class="puzzle-emoji" aria-hidden="true">👑</span>
+            <span class="puzzle-name">Pedro Fernandes</span>
+            <span class="puzzle-date">6 de agosto</span>
+          </a>
+        </li>
+      </ul>
+
+      <footer>Feito com carinho.</footer>
+    </main>
+  </body>
+</html>

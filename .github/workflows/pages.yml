@@ -3,6 +3,7 @@ name: Publicar no GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -15,7 +16,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obter o site
+        uses: actions/checkout@v6
+      - name: Instalar o Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar as dependências
+        run: npm ci
+      - name: Correr os testes de todos os puzzles
+        run: npm test
+
   deploy:
+    needs: test
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -25,10 +43,16 @@ jobs:
         uses: actions/checkout@v6
       - name: Configurar o GitHub Pages
         uses: actions/configure-pages@v5
+      - name: Reunir as páginas
+        run: |
+          mkdir _site
+          cp index.html .nojekyll _site/
+          cp -R puzzles _site/
+          find _site -name '*.test.js' -delete
       - name: Preparar os ficheiros
         uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: _site
       - name: Publicar
         id: deployment
         uses: actions/deploy-pages@v4
