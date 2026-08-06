@@ -1,7 +1,8 @@
 # Puzzles de aniversário
 
 Um puzzle por pessoa, pensado primeiro para telemóvel e publicado através do GitHub Pages.
-Cada pessoa tem o seu jogo: uns são puzzles deslizantes, outros são de encaixe (jigsaw).
+Cada pessoa tem o seu jogo: uns são puzzles deslizantes, outros são de encaixe (jigsaw)
+e outros de rotação — as peças ficam no sítio certo, mas tortas.
 
 A página inicial ([`index.html`](index.html)) é apenas um índice com as ligações para cada puzzle.
 
@@ -36,6 +37,7 @@ se estragam uns aos outros — e um teste de cada suite verifica exactamente iss
 | --- | --- | --- | --- |
 | Inês Ferreira | Deslizante 3 × 3 | [`puzzles/ines-ferreira/`](puzzles/ines-ferreira/index.html) | [`ines-ferreira.test.js`](puzzles/ines-ferreira/ines-ferreira.test.js) |
 | Pedro Fernandes | Encaixe (jigsaw) 4 × 4 | [`puzzles/pedro-fernandes/`](puzzles/pedro-fernandes/index.html) | [`pedro-fernandes.test.js`](puzzles/pedro-fernandes/pedro-fernandes.test.js) |
+| Inês Arbués | Rotação 3 × 3 | [`puzzles/ines-arbues/`](puzzles/ines-arbues/index.html) | [`ines-arbues.test.js`](puzzles/ines-arbues/ines-arbues.test.js) |
 
 ## Acrescentar uma pessoa
 
@@ -47,7 +49,9 @@ se estragam uns aos outros — e um teste de cada suite verifica exactamente iss
    `PERSON` e `SLUG` no topo do ficheiro.
 5. Acrescentar a pessoa à lista da página inicial e à tabela deste README.
 
-No puzzle de encaixe, a dificuldade está na constante `SIZE` (4 = 16 peças).
+Nos puzzles de encaixe e de rotação, a dificuldade está na constante `SIZE`
+(4 = 16 peças). No de rotação, cada peça fica no seu lugar e só muda de ângulo:
+um toque roda-a um quarto de volta, e o jogo acaba quando estão todas direitas.
 
 ## Testes
 
