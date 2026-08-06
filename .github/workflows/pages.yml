@@ -11,9 +11,11 @@ permissions:
   pages: write
   id-token: write
 
+# Uma publicação de cada vez. Não se cancela a que está a meio: cancelar uma
+# publicação já entregue ao GitHub Pages deixa-a pendurada e a seguinte espera por ela.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   test:
@@ -41,8 +43,10 @@ jobs:
     steps:
       - name: Obter o site
         uses: actions/checkout@v6
+      # As três acções do Pages têm de andar a par: o artefacto que a v5 grava
+      # só é entregue por uma versão de deploy-pages que o saiba ir buscar.
       - name: Configurar o GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - name: Reunir as páginas
         run: |
           mkdir _site
@@ -50,9 +54,9 @@ jobs:
           cp -R assets puzzles _site/
           find _site -name '*.test.js' -delete
       - name: Preparar os ficheiros
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
       - name: Publicar
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
