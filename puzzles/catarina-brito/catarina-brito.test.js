@@ -548,6 +548,9 @@ describe(`Puzzle da ${PERSON} — fotografia e final`, () => {
     // Com o tangram feito, os cortes desaparecem e fica só a fotografia.
     expect(document.querySelector("#board").classList.contains("is-solved")).toBe(true);
 
+    // A festa dá os parabéns pelo nome, tanto no título como no texto.
+    expect(document.querySelector("#celebrationTitle").textContent).toContain(PERSON);
+
     const text = document.querySelector("#celebrationText").textContent;
     expect(text).toContain(PERSON);
     expect(text).toContain(`${TOTAL} tentativas`);
