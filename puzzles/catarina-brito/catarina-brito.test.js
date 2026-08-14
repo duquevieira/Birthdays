@@ -168,6 +168,16 @@ describe(`Puzzle da ${PERSON} — página`, () => {
     expect(document.querySelector('meta[name="twitter:image"]').content).toBe(`${PAGE_URL}assets/og-image.jpg`);
   });
 
+  it("dá os parabéns na pré-visualização da ligação, em vez de explicar o jogo", () => {
+    const document = openPage();
+    const greeting = document.querySelector('meta[property="og:description"]').content;
+
+    // É o texto que o WhatsApp mostra a quem recebe a ligação: fala do dia dela.
+    expect(greeting).toContain(PERSON);
+    expect(greeting).not.toMatch(/tangram|peças|puzzle/i);
+    expect(document.querySelector('meta[name="twitter:description"]').content).toBe(greeting);
+  });
+
   it("é autónoma: só usa ficheiros da sua própria pasta", () => {
     expect(html).not.toContain("../");
     const document = openPage();
