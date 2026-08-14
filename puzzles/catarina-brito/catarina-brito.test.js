@@ -1,6 +1,7 @@
-// Todos os testes do puzzle da Catarina — um tangram de 7 peças. O ficheiro é
-// autónomo: não importa nada de outros puzzles, para que cada pasta possa ser
-// copiada tal como está.
+// Todos os testes do puzzle da Catarina — um tangram de 7 peças, sem ajudas: a
+// caixa está vazia e cada peça tem de ser rodada e largada no sítio certo. O
+// ficheiro é autónomo: não importa nada de outros puzzles, para que cada pasta
+// possa ser copiada tal como está.
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -11,6 +12,9 @@ const PERSON = "Catarina";
 const SLUG = "catarina-brito";
 const TOTAL = 7;
 const UNIT = 4;              // o quadrado do tangram tem 4 unidades de lado
+const STEP = 45;             // cada toque roda a peça um oitavo de volta
+const BOARD = 400;           // o tamanho que damos à caixa nos testes, em píxeis
+const PIXELS = BOARD / UNIT; // píxeis por unidade do quadrado
 
 const PAGE_URL = `https://duquevieira.github.io/Birthdays/puzzles/${SLUG}/`;
 
@@ -19,7 +23,7 @@ const html = readFileSync(resolve(puzzleDir, "index.html"), "utf8");
 
 let dom = null;
 
-/** Gerador determinista, para que as peças saiam sempre pela mesma ordem. */
+/** Gerador determinista, para que as peças saiam sempre iguais. */
 function seededRandom(seed) {
   let state = seed >>> 0;
   return () => {
@@ -30,6 +34,11 @@ function seededRandom(seed) {
   };
 }
 
+/**
+ * O jsdom não faz contas de layout: sem isto a caixa mediria zero e não haveria
+ * onde largar as peças. Damos-lhe um tamanho fixo, e assim uma unidade do
+ * quadrado vale PIXELS píxeis — é o que deixa os testes apontar a sítios certos.
+ */
 function openPage({ seed = 20260814 } = {}) {
   dom = new JSDOM(html, {
     runScripts: "dangerously",
@@ -39,7 +48,11 @@ function openPage({ seed = 20260814 } = {}) {
       window.Math.random = seededRandom(seed);
     },
   });
-  return dom.window.document;
+  const { document } = dom.window;
+  document.querySelector("#boardWrap").getBoundingClientRect = () => ({
+    x: 0, y: 0, left: 0, top: 0, right: BOARD, bottom: BOARD, width: BOARD, height: BOARD,
+  });
+  return document;
 }
 
 /** As peças que ainda estão por pôr, pela ordem em que aparecem na tábua. */
@@ -47,12 +60,12 @@ const trayOrder = (document) =>
   [...document.querySelectorAll(".piece")].map((piece) => Number(piece.dataset.piece));
 
 const pieceButton = (document, piece) => document.querySelector(`.piece[data-piece="${piece}"]`);
-const slotButton = (document, slot) => document.querySelector(`.slot[data-slot="${slot}"]`);
+const angleOf = (document, piece) => Number(pieceButton(document, piece).dataset.angle);
 const placedPieces = (document) =>
   [...document.querySelectorAll(".placed-piece")].map((held) => Number(held.dataset.placed));
 
 /** Os cantos da peça, lidos do recorte do seu desenho: "M 0 0 L 4 0 L 2 2 Z". */
-function cornersOfPiece(document, piece) {
+function cornersOf(document, piece) {
   const shape = pieceButton(document, piece).querySelector("clipPath path").getAttribute("d");
   return shape
     .replace(/^M\s*/, "")
@@ -61,14 +74,11 @@ function cornersOfPiece(document, piece) {
     .map((corner) => corner.trim().split(/\s+/).map(Number));
 }
 
-/** Os mesmos cantos, lidos do recorte do lugar na caixa: "polygon(0% 0%, ...)". */
-function cornersOfSlot(document, slot) {
-  const polygon = slotButton(document, slot).style.clipPath;
-  return polygon
-    .slice("polygon(".length, -1)
-    .split(",")
-    .map((corner) => corner.trim().split(/\s+/).map((value) => (parseFloat(value) * UNIT) / 100));
-}
+/** O centro de gravidade da peça: é ali que ela tem de ser largada. */
+const centreOf = (corners) => ({
+  x: corners.reduce((sum, [x]) => sum + x, 0) / corners.length,
+  y: corners.reduce((sum, [, y]) => sum + y, 0) / corners.length,
+});
 
 /** Fórmula do sapateiro: a área de um polígono a partir dos seus cantos. */
 const areaOf = (corners) =>
@@ -86,15 +96,55 @@ const sidesOf = (corners) =>
     return Number(Math.hypot(nextX - x, nextY - y).toFixed(3));
   });
 
-/** Pega na peça (se ainda não estiver na mão) e põe-na num lugar da caixa. */
-function dropPieceOn(document, piece, slot) {
+/** Um toque na caixa, no ponto (x, y) dado em unidades do quadrado. */
+function tapBoard(document, point) {
+  document.querySelector("#boardWrap").dispatchEvent(
+    new dom.window.MouseEvent("click", {
+      bubbles: true,
+      clientX: point.x * PIXELS,
+      clientY: point.y * PIXELS,
+    }),
+  );
+}
+
+const pickUp = (document, piece) => pieceButton(document, piece).click();
+
+/** Um evento de ponteiro num sítio do ecrã — é assim que se arrasta uma peça. */
+function pointer(element, type, clientX, clientY) {
+  element.dispatchEvent(
+    new dom.window.MouseEvent(type, { bubbles: true, cancelable: true, clientX, clientY }),
+  );
+}
+
+/** Arrasta a peça, com o dedo, da tábua até um ponto da caixa. */
+function dragTo(document, piece, point) {
   const button = pieceButton(document, piece);
-  if (!button.classList.contains("is-selected")) button.click();
-  slotButton(document, slot).click();
+  const wrap = document.querySelector("#boardWrap");
+  pointer(button, "pointerdown", 10, 10);
+  pointer(wrap, "pointermove", point.x * PIXELS, point.y * PIXELS);
+  pointer(wrap, "pointerup", point.x * PIXELS, point.y * PIXELS);
+}
+
+/** Roda a peça até ficar direita — é assim que se joga, um toque de cada vez. */
+function straighten(document, piece) {
+  let turns = 0;
+  while (angleOf(document, piece) !== 0) {
+    pieceButton(document, piece).click();
+    turns += 1;
+    if (turns > 360 / STEP) throw new Error("a peça nunca fica direita");
+  }
+  return turns;
+}
+
+/** Pega na peça, endireita-a e larga-a no lugar dela. */
+function settle(document, piece) {
+  pickUp(document, piece);
+  straighten(document, piece);
+  tapBoard(document, centreOf(cornersOf(document, piece)));
 }
 
 function solve(document) {
-  trayOrder(document).forEach((piece) => dropPieceOn(document, piece, piece));
+  trayOrder(document).forEach((piece) => settle(document, piece));
 }
 
 afterEach(() => {
@@ -139,20 +189,30 @@ describe(`Puzzle da ${PERSON} — página`, () => {
 });
 
 describe(`Puzzle da ${PERSON} — as sete peças do tangram`, () => {
-  it("dá sete peças por pôr e sete lugares vazios", () => {
+  it("dá sete peças por pôr e uma caixa vazia", () => {
     const document = openPage();
 
     expect(document.querySelectorAll(".piece")).toHaveLength(TOTAL);
-    expect(document.querySelectorAll(".slot")).toHaveLength(TOTAL);
     expect(document.querySelectorAll(".placed-piece")).toHaveLength(0);
     expect(trayOrder(document).slice().sort((a, b) => a - b)).toEqual([...Array(TOTAL).keys()]);
     expect(document.querySelector("#placedCount").textContent).toBe(`0/${TOTAL}`);
   });
 
+  it("não mostra em lado nenhum onde é o lugar de cada peça", () => {
+    const document = openPage();
+
+    // Nem contornos gravados no fundo, nem lugares para tocar: a caixa é lisa.
+    expect(document.querySelector("#board").querySelector("svg")).toBe(null);
+    expect(document.querySelectorAll(".slot")).toHaveLength(0);
+    expect(document.querySelectorAll(".engraving")).toHaveLength(0);
+    // A mira só aparece depois de se pegar numa peça.
+    expect(document.querySelector("#aim").hidden).toBe(true);
+  });
+
   it("é mesmo o tangram: dois triângulos grandes, um médio, dois pequenos, um quadrado e um paralelogramo", () => {
     const document = openPage();
     const shapes = [...Array(TOTAL).keys()].map((piece) => {
-      const corners = cornersOfPiece(document, piece);
+      const corners = cornersOf(document, piece);
       return { corners: corners.length, area: areaOf(corners), sides: sidesOf(corners) };
     });
 
@@ -178,28 +238,16 @@ describe(`Puzzle da ${PERSON} — as sete peças do tangram`, () => {
 
   it("as peças enchem o quadrado todo, sem folgas nem sobreposições", () => {
     const document = openPage();
-    const pieces = [...Array(TOTAL).keys()].map((piece) => cornersOfPiece(document, piece));
+    const pieces = [...Array(TOTAL).keys()].map((piece) => cornersOf(document, piece));
 
-    // A soma das áreas é a do quadrado inteiro — nenhuma peça sobra nem falta.
     const total = pieces.reduce((sum, corners) => sum + areaOf(corners), 0);
     expect(total).toBe(UNIT * UNIT);
 
-    // E nenhum canto sai fora do quadrado.
     pieces.flat().forEach(([x, y]) => {
       expect(x).toBeGreaterThanOrEqual(0);
       expect(x).toBeLessThanOrEqual(UNIT);
       expect(y).toBeGreaterThanOrEqual(0);
       expect(y).toBeLessThanOrEqual(UNIT);
-    });
-  });
-
-  it("recorta cada lugar da caixa com a forma exacta da sua peça", () => {
-    const document = openPage();
-
-    [...Array(TOTAL).keys()].forEach((piece) => {
-      // O lugar é um botão que ocupa a caixa toda e é recortado com a forma da
-      // peça: é o recorte que decide onde é que o dedo tem mesmo de cair.
-      expect(cornersOfSlot(document, piece)).toEqual(cornersOfPiece(document, piece));
     });
   });
 
@@ -228,85 +276,242 @@ describe(`Puzzle da ${PERSON} — as sete peças do tangram`, () => {
     expect(windows.size).toBe(TOTAL);
   });
 
-  it("dá a cada peça na tábua o seu tamanho verdadeiro", () => {
+  it("dá a cada peça na tábua o espaço que ela ocupa a rodar", () => {
     const document = openPage();
 
     [...Array(TOTAL).keys()].forEach((piece) => {
-      const corners = cornersOfPiece(document, piece);
-      const xs = corners.map(([x]) => x);
-      const ys = corners.map(([, y]) => y);
-      const button = pieceButton(document, piece);
+      const corners = cornersOf(document, piece);
+      const centre = centreOf(corners);
+      const reach = Math.max(...corners.map(([x, y]) => Math.hypot(x - centre.x, y - centre.y)));
 
-      // --w e --h são a fracção do quadrado que a peça ocupa: é o que faz o
-      // triângulo grande aparecer maior do que o pequeno, também na tábua.
-      expect(Number(button.style.getPropertyValue("--w"))).toBeCloseTo((Math.max(...xs) - Math.min(...xs)) / UNIT);
-      expect(Number(button.style.getPropertyValue("--h"))).toBeCloseTo((Math.max(...ys) - Math.min(...ys)) / UNIT);
-      expect(button.style.getPropertyValue("--tilt")).toMatch(/^-?\d+deg$/);
+      // --r é a roda que a peça desenha ao girar: nunca sai da sua caixa, e o
+      // triângulo grande continua a ser bem maior do que o pequeno.
+      expect(Number(pieceButton(document, piece).style.getPropertyValue("--r"))).toBeCloseTo(
+        (reach * 2) / UNIT,
+      );
     });
   });
 
-  it.each([1, 7, 42, 2026, 20260814])("baralha as peças (semente %i)", (seed) => {
-    const document = openPage({ seed });
-    expect(trayOrder(document)).not.toEqual([...Array(TOTAL).keys()]);
+  it.each([1, 7, 42, 2026, 20260814])(
+    "baralha as peças e torce-as todas (semente %i)",
+    (seed) => {
+      const document = openPage({ seed });
+      const angles = [...Array(TOTAL).keys()].map((piece) => angleOf(document, piece));
+
+      // Nenhuma peça começa direita: todas têm mesmo de ser rodadas.
+      expect(angles.every((angle) => angle !== 0)).toBe(true);
+      expect(angles.every((angle) => angle % STEP === 0 && angle < 360)).toBe(true);
+      expect(trayOrder(document)).not.toEqual([...Array(TOTAL).keys()]);
+    },
+  );
+});
+
+describe(`Puzzle da ${PERSON} — rodar e largar`, () => {
+  it("pega na peça ao primeiro toque e roda-a nos seguintes", () => {
+    const document = openPage();
+    const piece = trayOrder(document)[0];
+    const before = angleOf(document, piece);
+
+    pickUp(document, piece);
+    expect(pieceButton(document, piece).classList.contains("is-selected")).toBe(true);
+    expect(angleOf(document, piece)).toBe(before);   // pegar não roda
+
+    pieceButton(document, piece).click();
+    expect(angleOf(document, piece)).toBe((before + STEP) % 360);
+    expect(pieceButton(document, piece).style.getPropertyValue("--angle")).toBe(
+      `${(before + STEP) % 360}deg`,
+    );
   });
 
-  it("põe a peça no lugar certo", () => {
+  it("dá a volta completa ao fim de oito toques", () => {
+    const document = openPage();
+    const piece = trayOrder(document)[0];
+    const before = angleOf(document, piece);
+
+    pickUp(document, piece);
+    for (let turn = 0; turn < 360 / STEP; turn += 1) pieceButton(document, piece).click();
+
+    expect(angleOf(document, piece)).toBe(before);
+  });
+
+  it("roda também pelo botão, e só com uma peça na mão", () => {
+    const document = openPage();
+    const piece = trayOrder(document)[0];
+    const rotate = document.querySelector("#rotateButton");
+
+    expect(rotate.disabled).toBe(true);
+
+    pickUp(document, piece);
+    const before = angleOf(document, piece);
+    expect(rotate.disabled).toBe(false);
+
+    rotate.click();
+    expect(angleOf(document, piece)).toBe((before + STEP) % 360);
+  });
+
+  it("mostra a mira, no ângulo da peça, onde o dedo aponta", () => {
+    const document = openPage();
+    const piece = trayOrder(document)[0];
+    const aim = document.querySelector("#aim");
+
+    pickUp(document, piece);
+    expect(aim.hidden).toBe(true);   // ainda não se apontou a nenhum sítio
+
+    // Aponta-se ao meio da caixa sem largar (é o que o rato faz ao passar).
+    document.querySelector("#boardWrap").dispatchEvent(
+      new dom.window.MouseEvent("pointermove", {
+        bubbles: true, clientX: 2 * PIXELS, clientY: 2 * PIXELS,
+      }),
+    );
+
+    expect(aim.hidden).toBe(false);
+    expect(aim.style.left).toBe("50%");
+    expect(aim.style.top).toBe("50%");
+    expect(aim.style.getPropertyValue("--angle")).toBe(`${angleOf(document, piece)}deg`);
+  });
+
+  it("assenta a peça quando está direita e cai no lugar certo", () => {
     const document = openPage();
     const piece = trayOrder(document)[0];
 
-    dropPieceOn(document, piece, piece);
+    settle(document, piece);
 
     expect(placedPieces(document)).toEqual([piece]);
     expect(pieceButton(document, piece)).toBe(null);
     expect(document.querySelectorAll(".piece")).toHaveLength(TOTAL - 1);
-    expect(slotButton(document, piece).classList.contains("is-filled")).toBe(true);
     expect(document.querySelector("#placedCount").textContent).toBe(`1/${TOTAL}`);
     // Na caixa, a peça mostra o quadrado inteiro: é assim que casa com as outras.
     expect(document.querySelector(".placed-piece svg").getAttribute("viewBox")).toBe(`0 0 ${UNIT} ${UNIT}`);
+    // E a mão fica vazia.
+    expect(document.querySelector("#aim").hidden).toBe(true);
+    expect(document.querySelector("#rotateButton").disabled).toBe(true);
   });
 
-  it("não deixa pôr a peça no lugar errado", () => {
+  it("não assenta a peça direita se for largada fora do lugar dela", () => {
     const document = openPage();
     const piece = trayOrder(document)[0];
-    const wrongSlot = (piece + 3) % TOTAL;
+    const home = centreOf(cornersOf(document, piece));
 
-    dropPieceOn(document, piece, wrongSlot);
+    pickUp(document, piece);
+    straighten(document, piece);
+    // Uma unidade ao lado: bem mais do que a folga de 0,42.
+    tapBoard(document, { x: (home.x + 1) % UNIT, y: home.y });
 
     expect(placedPieces(document)).toEqual([]);
     expect(pieceButton(document, piece)).not.toBe(null);
-    expect(slotButton(document, wrongSlot).classList.contains("is-filled")).toBe(false);
-    expect(slotButton(document, wrongSlot).classList.contains("is-wrong")).toBe(true);
+    expect(document.querySelector("#boardWrap").classList.contains("is-wrong")).toBe(true);
     expect(document.querySelector("#placedCount").textContent).toBe(`0/${TOTAL}`);
   });
 
-  it("não faz nada quando se toca num lugar sem peça na mão", () => {
+  it("não assenta a peça torta, mesmo caindo no lugar certo", () => {
+    const document = openPage();
+    const piece = trayOrder(document)[0];
+    const home = centreOf(cornersOf(document, piece));
+
+    pickUp(document, piece);
+    straighten(document, piece);
+    pieceButton(document, piece).click();     // torce-a um oitavo de volta
+    expect(angleOf(document, piece)).toBe(STEP);
+
+    tapBoard(document, home);
+
+    // A forma até encaixava, mas a fotografia que ela leva ficava virada.
+    expect(placedPieces(document)).toEqual([]);
+    expect(document.querySelector("#boardWrap").classList.contains("is-wrong")).toBe(true);
+  });
+
+  it("aceita a peça em qualquer ponto dentro da folga", () => {
+    const document = openPage();
+    const piece = trayOrder(document)[0];
+    const home = centreOf(cornersOf(document, piece));
+
+    pickUp(document, piece);
+    straighten(document, piece);
+    tapBoard(document, { x: home.x + 0.3, y: home.y - 0.2 });   // 0,36 do centro
+
+    expect(placedPieces(document)).toEqual([piece]);
+  });
+
+  it("arrasta a peça da tábua para dentro da caixa", () => {
+    const document = openPage();
+    const piece = trayOrder(document)[0];
+
+    pickUp(document, piece);
+    straighten(document, piece);
+    dragTo(document, piece, centreOf(cornersOf(document, piece)));
+
+    expect(placedPieces(document)).toEqual([piece]);
+    expect(document.querySelector("#placedCount").textContent).toBe(`1/${TOTAL}`);
+  });
+
+  it("larga o arrasto fora da caixa sem rodar a peça sem querer", () => {
+    const document = openPage();
+    const piece = trayOrder(document)[0];
+    const button = pieceButton(document, piece);
+    pickUp(document, piece);
+    const before = angleOf(document, piece);
+
+    // Arrasta e larga ao lado da caixa: a peça fica na mão, tal como estava.
+    pointer(button, "pointerdown", 10, 10);
+    pointer(button, "pointermove", 30, 900);
+    pointer(button, "pointerup", 30, 900);
+    // O browser manda um clique a seguir ao arrasto — este não pode contar.
+    button.click();
+
+    expect(placedPieces(document)).toEqual([]);
+    expect(angleOf(document, piece)).toBe(before);
+    expect(button.classList.contains("is-selected")).toBe(true);
+
+    // E o toque seguinte, esse, volta a rodar como sempre.
+    button.click();
+    expect(angleOf(document, piece)).toBe((before + STEP) % 360);
+  });
+
+  it("não faz nada quando se toca na caixa sem peça na mão", () => {
     const document = openPage();
 
-    slotButton(document, 0).click();
+    tapBoard(document, { x: 2, y: 2 });
 
     expect(placedPieces(document)).toEqual([]);
     expect(document.querySelectorAll(".piece")).toHaveLength(TOTAL);
   });
 
-  it("pousa a peça quando se toca nela outra vez", () => {
+  it("larga a peça da mão com a tecla Escape", () => {
     const document = openPage();
     const piece = trayOrder(document)[0];
 
-    pieceButton(document, piece).click();
-    expect(pieceButton(document, piece).classList.contains("is-selected")).toBe(true);
+    pickUp(document, piece);
+    document.dispatchEvent(new dom.window.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
 
-    pieceButton(document, piece).click();
     expect(pieceButton(document, piece).classList.contains("is-selected")).toBe(false);
-
-    // Sem peça na mão, tocar no lugar certo não põe nada.
-    slotButton(document, piece).click();
-    expect(placedPieces(document)).toEqual([]);
+    expect(document.querySelector("#rotateButton").disabled).toBe(true);
   });
 
-  it("volta ao início quando se baralha outra vez", () => {
+  it("também se joga com o teclado: as setas movem a peça e o Enter larga-a", () => {
     const document = openPage();
     const piece = trayOrder(document)[0];
-    dropPieceOn(document, piece, piece);
+    const wrap = document.querySelector("#boardWrap");
+    const press = (key) => wrap.dispatchEvent(new dom.window.KeyboardEvent("keydown", { key, bubbles: true }));
+
+    pickUp(document, piece);
+    straighten(document, piece);
+
+    // A mira começa no meio da caixa e anda 0,2 unidades de cada vez.
+    const home = centreOf(cornersOf(document, piece));
+    press("ArrowRight");
+    expect(document.querySelector("#aim").hidden).toBe(false);
+
+    const steps = (from, to) => Math.round((to - from) / 0.2);
+    for (let step = 0; step < Math.abs(steps(2.2, home.x)); step += 1) press(home.x > 2.2 ? "ArrowRight" : "ArrowLeft");
+    for (let step = 0; step < Math.abs(steps(2, home.y)); step += 1) press(home.y > 2 ? "ArrowDown" : "ArrowUp");
+    press("Enter");
+
+    expect(placedPieces(document)).toEqual([piece]);
+  });
+
+  it("volta ao início quando se começa de novo", () => {
+    const document = openPage();
+    settle(document, trayOrder(document)[0]);
     expect(document.querySelector("#placedCount").textContent).toBe(`1/${TOTAL}`);
 
     document.querySelector("#shuffleButton").click();
@@ -314,7 +519,6 @@ describe(`Puzzle da ${PERSON} — as sete peças do tangram`, () => {
     expect(document.querySelector("#placedCount").textContent).toBe(`0/${TOTAL}`);
     expect(document.querySelector("#timer").textContent).toBe("0:00");
     expect(document.querySelectorAll(".piece")).toHaveLength(TOTAL);
-    expect(document.querySelectorAll(".slot")).toHaveLength(TOTAL);
     expect(document.querySelectorAll(".placed-piece")).toHaveLength(0);
   });
 });
@@ -356,7 +560,10 @@ describe(`Puzzle da ${PERSON} — fotografia e final`, () => {
   it("conta as tentativas falhadas até ao fim", async () => {
     const document = openPage();
     const first = trayOrder(document)[0];
-    dropPieceOn(document, first, (first + 2) % TOTAL);   // uma tentativa a mais
+
+    pickUp(document, first);
+    straighten(document, first);
+    tapBoard(document, { x: 0.1, y: 3.9 });   // uma tentativa a mais, no sítio errado
     solve(document);
 
     expect(document.querySelector("#celebrationText").textContent).toContain(`${TOTAL + 1} tentativas`);
@@ -367,7 +574,7 @@ describe(`Puzzle da ${PERSON} — fotografia e final`, () => {
     solve(document);
     await new Promise((done) => dom.window.setTimeout(done, 1500));
 
-    slotButton(document, 0).click();
+    tapBoard(document, { x: 2, y: 2 });
 
     expect(placedPieces(document)).toHaveLength(TOTAL);
     expect(document.querySelector("#placedCount").textContent).toBe(`${TOTAL}/${TOTAL}`);

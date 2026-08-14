@@ -59,6 +59,12 @@ quadrado e um paralelogramo — desenhado na constante `PIECES` num quadrado de
 4 × 4 unidades. A fotografia entra inteira em cada peça e é o recorte que mostra
 só o bocado dela, por isso as peças casam ao milímetro quando assentam na caixa.
 
+A caixa não tem risco nenhum: os lugares certos existem no código mas não se
+vêem, e a única pista é o bocado de fotografia que cada peça leva. Nenhuma peça
+começa direita — o primeiro toque pega nela, os seguintes rodam-na `STEP` graus —
+e só assenta se for largada a menos de `TOLERANCE` do sítio dela **e** estiver
+direita: a forma até encaixaria de lado, mas a fotografia ficaria virada.
+
 ## Testes
 
 ```bash

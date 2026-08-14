@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#8a6238" />
-    <meta name="description" content="Um tangram de 7 peças de madeira: põe cada peça no seu lugar e a fotografia aparece." />
+    <meta name="description" content="Um tangram de 7 peças de madeira, sem ajudas: roda cada peça e descobre onde é o lugar dela." />
     <link rel="canonical" href="https://duquevieira.github.io/Birthdays/puzzles/catarina-brito/" />
     <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_PT" />
     <meta property="og:url" content="https://duquevieira.github.io/Birthdays/puzzles/catarina-brito/" />
     <meta property="og:title" content="Parabéns, Catarina! 🎂" />
-    <meta property="og:description" content="Um tangram de 7 peças de madeira: põe cada peça no seu lugar e a fotografia aparece." />
+    <meta property="og:description" content="Um tangram de 7 peças de madeira, sem ajudas: roda cada peça e descobre onde é o lugar dela." />
     <meta property="og:image" content="https://duquevieira.github.io/Birthdays/puzzles/catarina-brito/assets/og-image.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
@@ -19,7 +19,7 @@
     <meta property="og:image:alt" content="Parabéns, Catarina — um puzzle especial de aniversário" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Parabéns, Catarina! 🎂" />
-    <meta name="twitter:description" content="Um tangram de 7 peças de madeira: põe cada peça no seu lugar e a fotografia aparece." />
+    <meta name="twitter:description" content="Um tangram de 7 peças de madeira, sem ajudas: roda cada peça e descobre onde é o lugar dela." />
     <meta name="twitter:image" content="https://duquevieira.github.io/Birthdays/puzzles/catarina-brito/assets/og-image.jpg" />
     <title>Parabéns, Catarina! 🎂</title>
     <style>
@@ -43,8 +43,8 @@
         --cream: #faf3e7;
         --card: linear-gradient(168deg, #fdf7ec 0%, #f3e6d0 100%);
         --shadow: 0 26px 70px rgba(74, 48, 24, 0.24);
-        /* A prateleira das peças cresce com o ecrã, mas nunca passa disto. */
-        --set-size: clamp(74px, 21vw, 96px);
+        /* Quanto mede, na tábua, uma peça que enchesse o quadrado todo. */
+        --set-size: clamp(64px, 17.5vw, 80px);
       }
 
       * {
@@ -77,7 +77,7 @@
       .page-shell {
         position: relative;
         display: grid;
-        /* minmax(0, 1fr): a fila de peças é larga e não pode esticar a página. */
+        /* minmax(0, 1fr): a tábua das peças é larga e não pode esticar a página. */
         grid-template-columns: minmax(0, 1fr);
         min-height: 100svh;
         place-items: center;
@@ -216,7 +216,7 @@
         white-space: nowrap;
       }
 
-      /* ---------- A moldura e o tabuleiro ---------- */
+      /* ---------- A moldura e a caixa ---------- */
 
       /*
        * A moldura é a do tangram de madeira: quatro tábuas de carvalho com o veio
@@ -236,10 +236,14 @@
           0 18px 40px rgba(74, 48, 24, 0.32);
       }
 
-      /* O fundo da caixa: madeira mais escura, vista lá do fundo do encaixe. */
+      /*
+       * O fundo da caixa: madeira escura e lisa. Não tem risco nenhum — quem joga
+       * é que tem de descobrir onde é que cada peça assenta.
+       */
       .board-wrap {
         position: relative;
         aspect-ratio: 1;
+        overflow: hidden;
         border-radius: 3px;
         background:
           repeating-linear-gradient(88deg, rgba(255, 255, 255, 0.04) 0 3px, rgba(40, 22, 6, 0.05) 3px 7px),
@@ -250,66 +254,29 @@
         touch-action: none;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
+        transition: box-shadow 160ms ease;
+      }
+
+      /* Com uma peça na mão, a caixa acende-se: é ali que ela tem de cair. */
+      .board-wrap.is-armed {
+        cursor: crosshair;
+        box-shadow:
+          inset 0 3px 10px rgba(35, 18, 4, 0.55),
+          inset 0 0 0 2px rgba(255, 236, 205, 0.4);
+      }
+
+      .board-wrap.is-wrong {
+        animation: shake 400ms ease;
+      }
+
+      .board-wrap:focus-visible {
+        outline: 3px solid var(--olive);
+        outline-offset: 3px;
       }
 
       .board {
         position: absolute;
         inset: 0;
-        /* As peças assentes transbordam um fio (ver GROW); a caixa apara-o. */
-        overflow: hidden;
-      }
-
-      /* O desenho gravado no fundo da caixa, que diz onde cada peça assenta. */
-      .engraving {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        transition: opacity 700ms ease;
-      }
-
-      .engraving path {
-        fill: none;
-        stroke: rgba(255, 236, 205, 0.24);
-        stroke-width: 1.2;
-        vector-effect: non-scaling-stroke;
-      }
-
-      .board.is-solved .engraving {
-        opacity: 0;
-      }
-
-      /*
-       * Cada lugar é um botão que ocupa a caixa toda e é recortado com a forma da
-       * peça — o recorte trata do desenho e também de saber onde é que o dedo caiu.
-       */
-      .slot {
-        position: absolute;
-        inset: 0;
-        padding: 0;
-        border: 0;
-        background: rgba(255, 236, 205, 0.05);
-        cursor: pointer;
-        transition: background 140ms ease;
-      }
-
-      .slot:hover:not(.is-filled) {
-        background: rgba(255, 236, 205, 0.14);
-      }
-
-      /* Enquanto há uma peça na mão, os lugares livres saltam à vista. */
-      .board.is-armed .slot:not(.is-filled) {
-        background: rgba(255, 236, 205, 0.16);
-      }
-
-      .slot.is-filled {
-        background: none;
-        cursor: default;
-        pointer-events: none;
-      }
-
-      .slot.is-wrong {
-        animation: shake 380ms ease;
-        background: rgba(158, 62, 40, 0.35);
       }
 
       .placed-piece {
@@ -317,6 +284,24 @@
         inset: 0;
         pointer-events: none;
         animation: snap 340ms cubic-bezier(0.22, 0.9, 0.3, 1.1);
+      }
+
+      /*
+       * A peça que está na mão, desenhada dentro da caixa no tamanho verdadeiro e
+       * no ângulo em que está. É a mira: mostra exactamente o que vai ser largado.
+       */
+      .aim {
+        position: absolute;
+        width: calc(var(--r, 0.5) * 100%);
+        height: calc(var(--r, 0.5) * 100%);
+        opacity: 0.82;
+        pointer-events: none;
+        filter: drop-shadow(0 4px 8px rgba(35, 18, 4, 0.55));
+        transform: translate(-50%, -50%) rotate(var(--angle, 0deg));
+      }
+
+      .aim[hidden] {
+        display: none;
       }
 
       .outline {
@@ -350,18 +335,17 @@
 
       /*
        * As peças ficam pousadas numa tábua, ao lado da caixa, tortas como ficam
-       * numa mesa. São só sete: cabem todas à vista, em duas ou três filas,
-       * sem ser preciso deslizar a tábua para as encontrar.
+       * numa mesa. São só sete: cabem todas à vista, sem ser preciso deslizar nada.
        */
       .tray {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
-        gap: 12px 14px;
+        gap: 10px 12px;
         min-height: calc(var(--set-size) + 26px);
         margin-top: 13px;
-        padding: 14px 12px;
+        padding: 12px;
         border-radius: 10px;
         background:
           repeating-linear-gradient(93deg, rgba(255, 255, 255, 0.05) 0 2px, rgba(40, 22, 6, 0.05) 2px 6px),
@@ -381,51 +365,37 @@
       }
 
       /*
-       * Cada peça guarda o seu tamanho verdadeiro: --w e --h são a fração do
-       * quadrado que ela ocupa, por isso o triângulo grande é mesmo o dobro do médio.
+       * Cada peça vive numa caixa quadrada do tamanho da roda que ela desenha ao
+       * girar — assim roda à vontade sem sair do sítio nem tapar as vizinhas, e o
+       * triângulo grande continua a ser bem maior do que o pequeno.
        */
       .piece {
         flex: 0 0 auto;
-        width: calc(var(--set-size) * var(--w));
-        height: calc(var(--set-size) * var(--h));
+        width: calc(var(--set-size) * var(--r));
+        height: calc(var(--set-size) * var(--r));
         padding: 0;
         border: 0;
         background: none;
         cursor: grab;
         filter: drop-shadow(0 3px 4px rgba(35, 18, 4, 0.5));
-        transform: rotate(var(--tilt, 0deg));
-        transition: transform 160ms ease, filter 160ms ease;
+        transform: rotate(var(--angle, 0deg));
+        transition: transform 200ms cubic-bezier(0.22, 0.75, 0.35, 1), filter 160ms ease;
         /* O dedo em cima da peça arrasta-a; ao lado dela, corre a página. */
         touch-action: none;
         -webkit-tap-highlight-color: transparent;
       }
 
-      .piece:hover {
-        transform: rotate(var(--tilt, 0deg)) scale(1.05);
-      }
-
       .piece.is-selected {
         filter: drop-shadow(0 0 3px rgba(255, 236, 205, 0.95)) drop-shadow(0 6px 9px rgba(35, 18, 4, 0.5));
-        transform: rotate(var(--tilt, 0deg)) scale(1.1);
       }
 
       .piece.is-dragging {
         opacity: 0.3;
       }
 
-      .drag-ghost {
-        position: fixed;
-        z-index: 30;
-        width: calc(var(--set-size) * var(--w) * 1.15);
-        height: calc(var(--set-size) * var(--h) * 1.15);
-        filter: drop-shadow(0 0 4px rgba(255, 236, 205, 0.85)) drop-shadow(0 12px 14px rgba(35, 18, 4, 0.5));
-        pointer-events: none;
-        transform: translate(-50%, -50%);
-      }
-
       .piece svg,
       .placed-piece svg,
-      .drag-ghost svg {
+      .aim svg {
         display: block;
         width: 100%;
         height: 100%;
@@ -461,7 +431,7 @@
         box-shadow: 0 8px 18px rgba(74, 48, 24, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
       }
 
-      .control-button.primary:hover,
+      .control-button.primary:hover:not(:disabled),
       .celebration-button:hover {
         background: linear-gradient(#a97c4c, #5b3818);
       }
@@ -471,8 +441,21 @@
         background: linear-gradient(#f4e7d0, #e7d5b6);
       }
 
+      .control-button.quiet {
+        grid-column: 1 / -1;
+        min-height: 42px;
+        color: var(--muted);
+        background: none;
+        border-color: rgba(138, 98, 56, 0.3);
+        font-size: 0.82rem;
+      }
+
+      .control-button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+
       .piece:focus-visible,
-      .slot:focus-visible,
       .control-button:focus-visible,
       .celebration-button:focus-visible {
         outline: 3px solid var(--olive);
@@ -601,8 +584,8 @@
 
       @keyframes shake {
         0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        50% { transform: translateX(5px); }
+        25% { transform: translateX(-6px); }
+        50% { transform: translateX(6px); }
         75% { transform: translateX(-3px); }
       }
 
@@ -611,16 +594,17 @@
         to { opacity: 1; transform: scale(1); }
       }
 
-      @media (max-height: 780px) and (orientation: portrait) {
-        :root { --set-size: clamp(60px, 17vw, 78px); }
+      @media (max-height: 800px) and (orientation: portrait) {
+        :root { --set-size: clamp(52px, 14vw, 66px); }
         .page-shell { padding-top: 12px; padding-bottom: 14px; }
         .eyebrow { margin-bottom: 5px; }
         h1 { margin-bottom: 11px; font-size: 2.2rem; }
         .game-card { padding: 11px; border-radius: 22px; }
         .scoreboard { margin-bottom: 8px; }
-        .tray { margin-top: 9px; }
+        .tray { margin-top: 9px; padding: 9px; }
         .controls { margin-top: 9px; }
         .control-button { min-height: 44px; }
+        .control-button.quiet { min-height: 38px; }
         .hint { margin-top: 8px; }
       }
 
@@ -664,8 +648,16 @@
           </div>
 
           <div class="frame">
-            <div class="board-wrap" id="boardWrap">
-              <div class="board" id="board" role="group" aria-label="Caixa do tangram"></div>
+            <div
+              class="board-wrap"
+              id="boardWrap"
+              tabindex="0"
+              role="application"
+              aria-label="Caixa do tangram. Com uma peça na mão, as setas movem-na e o Enter larga-a."
+            >
+              <div class="board" id="board">
+                <div class="aim" id="aim" hidden aria-hidden="true"></div>
+              </div>
               <div class="board-preview" id="preview" aria-hidden="true"></div>
             </div>
           </div>
@@ -673,10 +665,11 @@
           <div class="tray" id="tray" role="group" aria-label="Peças por pôr"></div>
 
           <div class="controls">
-            <button class="control-button primary" id="shuffleButton" type="button">Baralhar as peças</button>
+            <button class="control-button primary" id="rotateButton" type="button" disabled>Rodar a peça ↻</button>
             <button class="control-button secondary" id="previewButton" type="button" aria-pressed="false">Ver fotografia</button>
+            <button class="control-button quiet" id="shuffleButton" type="button">Começar de novo</button>
           </div>
-          <p class="hint"><span class="hint-icon" aria-hidden="true">✥</span>Arrasta a peça para o lugar dela — ou toca na peça e depois no lugar.</p>
+          <p class="hint"><span class="hint-icon" aria-hidden="true">↻</span>Toca numa peça para a rodares e arrasta-a para o sítio onde achas que ela encaixa.</p>
           <p class="sr-only" id="status" aria-live="polite"></p>
         </section>
       </main>
@@ -714,19 +707,31 @@
          * inteiro. Todos os cantos caem em meias unidades, por isso as peças
          * encostam umas às outras sem folgas nem sobreposições — é isso que faz
          * com que a fotografia, recortada por elas, volte a ficar inteira.
+         *
+         * Estes são os lugares certos, mas a caixa não os mostra: quem joga tem de
+         * os descobrir, olhando para o bocado de fotografia que cada peça leva.
          */
         const UNIT = 4;
         const PIECES = [
-          { key: "grande-cima", label: "triângulo grande de cima", points: [[0, 0], [4, 0], [2, 2]] },
-          { key: "grande-esquerda", label: "triângulo grande da esquerda", points: [[0, 0], [2, 2], [0, 4]] },
+          { key: "grande-cima", label: "triângulo grande", points: [[0, 0], [4, 0], [2, 2]] },
+          { key: "grande-esquerda", label: "triângulo grande", points: [[0, 0], [2, 2], [0, 4]] },
           { key: "medio", label: "triângulo médio", points: [[4, 2], [4, 4], [2, 4]] },
-          { key: "pequeno-canto", label: "triângulo pequeno do canto", points: [[4, 0], [4, 2], [3, 1]] },
+          { key: "pequeno-canto", label: "triângulo pequeno", points: [[4, 0], [4, 2], [3, 1]] },
           { key: "quadrado", label: "quadrado", points: [[3, 1], [4, 2], [3, 3], [2, 2]] },
           { key: "paralelogramo", label: "paralelogramo", points: [[3, 3], [2, 4], [0, 4], [1, 3]] },
-          { key: "pequeno-meio", label: "triângulo pequeno do meio", points: [[2, 2], [3, 3], [1, 3]] },
+          { key: "pequeno-meio", label: "triângulo pequeno", points: [[2, 2], [3, 3], [1, 3]] },
         ];
         const TOTAL = PIECES.length;
-        const TILTS = [-18, -11, -5, 6, 13, 21];   // as peças ficam tortas na tábua
+
+        const STEP = 45;          // cada toque roda a peça um oitavo de volta
+        const TURNS = 360 / STEP; // os ângulos possíveis: 0, 45, 90, ...
+        /*
+         * A folga com que uma peça assenta, em unidades do quadrado. Os centros de
+         * duas peças nunca estão a menos de 0,97 unidades um do outro, por isso
+         * 0,42 é largo para um dedo e continua a não haver dois lugares à escolha.
+         */
+        const TOLERANCE = 0.42;
+        const NUDGE = 0.2;        // quanto uma seta do teclado mexe a peça
         /*
          * Cortadas ao milímetro, as peças assentes deixavam ver um fio do fundo
          * escuro entre elas — é como o ecrã desenha duas arestas que se tocam.
@@ -739,69 +744,85 @@
         const SVG_NS = "http://www.w3.org/2000/svg";
         const XLINK_NS = "http://www.w3.org/1999/xlink";
 
+        const boardWrap = document.querySelector("#boardWrap");
         const board = document.querySelector("#board");
+        const aim = document.querySelector("#aim");
         const tray = document.querySelector("#tray");
         const placedCount = document.querySelector("#placedCount");
         const timer = document.querySelector("#timer");
         const status = document.querySelector("#status");
         const preview = document.querySelector("#preview");
         const previewButton = document.querySelector("#previewButton");
+        const rotateButton = document.querySelector("#rotateButton");
         const shuffleButton = document.querySelector("#shuffleButton");
         const celebration = document.querySelector("#celebration");
         const celebrationText = document.querySelector("#celebrationText");
         const playAgainButton = document.querySelector("#playAgainButton");
 
+        /** O centro de gravidade da peça — o ponto por onde ela se pega e se roda. */
+        function centreOf(points) {
+          return {
+            x: points.reduce((sum, [x]) => sum + x, 0) / points.length,
+            y: points.reduce((sum, [, y]) => sum + y, 0) / points.length,
+          };
+        }
+
+        /** O raio da roda que a peça desenha ao girar à volta do seu centro. */
+        const reachOf = (points, centre) =>
+          Math.max(...points.map(([x, y]) => Math.hypot(x - centre.x, y - centre.y)));
+
+        // O que cada peça tem de fixo: onde é o seu lugar e que espaço ocupa a rodar.
+        const SHAPES = PIECES.map(({ points }) => {
+          const home = centreOf(points);
+          const reach = reachOf(points, home);
+          return { home, reach };
+        });
+
+        let angles = new Array(TOTAL).fill(0);   // o ângulo a que cada peça está
         let placed = 0;
         let attempts = 0;
         let seconds = 0;
         let timerId = null;
         let gameStarted = false;
         let solved = false;
-        let selected = null;        // número da peça que está na mão, ou null
+        let selected = null;     // a peça que está na mão, ou null
+        let cursor = null;       // onde a mira está pousada, em unidades do quadrado
         let drag = null;
-        const slots = new Map();    // número da peça → o seu lugar na caixa
-
-        /** O rectângulo mais pequeno que contém a peça, em unidades do quadrado. */
-        function boundingBox(points) {
-          const xs = points.map(([x]) => x);
-          const ys = points.map(([, y]) => y);
-          const x = Math.min(...xs);
-          const y = Math.min(...ys);
-          return { x, y, width: Math.max(...xs) - x, height: Math.max(...ys) - y };
-        }
+        /*
+         * Um arrasto que acaba em cima da própria peça ainda dá um clique a
+         * seguir. Sem isto, largar a peça sem sair do sítio rodava-a sem querer.
+         */
+        let swallowClick = false;
+        const buttons = new Map();   // número da peça → o seu botão na tábua
 
         const pathOf = (points) => `M ${points.map(([x, y]) => `${x} ${y}`).join(" L ")} Z`;
 
         /** A mesma peça, um bocadinho maior, crescida a partir do seu centro. */
-        function grown(points) {
-          const centreX = points.reduce((sum, [x]) => sum + x, 0) / points.length;
-          const centreY = points.reduce((sum, [, y]) => sum + y, 0) / points.length;
+        function grown(points, centre) {
           return points.map(([x, y]) => [
-            centreX + (x - centreX) * GROW,
-            centreY + (y - centreY) * GROW,
+            centre.x + (x - centre.x) * GROW,
+            centre.y + (y - centre.y) * GROW,
           ]);
         }
-
-        /** O mesmo contorno, em percentagem, para recortar o botão do lugar. */
-        const polygonOf = (points) =>
-          `polygon(${points.map(([x, y]) => `${(x * 100) / UNIT}% ${(y * 100) / UNIT}%`).join(", ")})`;
 
         /**
          * A peça desenhada. A fotografia entra sempre inteira e no mesmo sítio
          * (0 0 4 4) — o que muda é a janela por onde se olha: na caixa vê-se o
-         * quadrado todo, na tábua vê-se só o rectângulo desta peça. É por isso que
-         * as peças, ao serem postas, casam ao milímetro umas com as outras.
+         * quadrado todo, solta vê-se a roda à volta do centro da peça. É por isso
+         * que as peças, ao assentarem, casam ao milímetro umas com as outras.
          */
         function createPieceSvg(piece, mode) {
           const { points } = PIECES[piece];
+          const { home, reach } = SHAPES[piece];
           const onBoard = mode === "board";
           const clipId = `${mode}-clip-${PIECES[piece].key}`;
-          const shape = pathOf(onBoard ? grown(points) : points);
-          const window_ = onBoard ? { x: 0, y: 0, width: UNIT, height: UNIT } : boundingBox(points);
+          const shape = pathOf(onBoard ? grown(points, home) : points);
+          const window_ = onBoard
+            ? { x: 0, y: 0, size: UNIT }
+            : { x: home.x - reach, y: home.y - reach, size: reach * 2 };
 
           const svg = document.createElementNS(SVG_NS, "svg");
-          svg.setAttribute("viewBox", `${window_.x} ${window_.y} ${window_.width} ${window_.height}`);
-          svg.setAttribute("preserveAspectRatio", "none");
+          svg.setAttribute("viewBox", `${window_.x} ${window_.y} ${window_.size} ${window_.size}`);
           svg.setAttribute("aria-hidden", "true");
 
           const defs = document.createElementNS(SVG_NS, "defs");
@@ -873,76 +894,121 @@
           return copy;
         }
 
-        function buildBoard() {
-          board.textContent = "";
-          slots.clear();
+        const describe = (piece) =>
+          angles[piece] === 0
+            ? `${PIECES[piece].label}, direito`
+            : `${PIECES[piece].label}, rodado ${angles[piece]} graus`;
 
-          // Primeiro o desenho gravado no fundo, por baixo de tudo.
-          const engraving = document.createElementNS(SVG_NS, "svg");
-          engraving.setAttribute("class", "engraving");
-          engraving.setAttribute("viewBox", `0 0 ${UNIT} ${UNIT}`);
-          engraving.setAttribute("preserveAspectRatio", "none");
-          engraving.setAttribute("aria-hidden", "true");
-          PIECES.forEach(({ points }) => {
-            const line = document.createElementNS(SVG_NS, "path");
-            line.setAttribute("d", pathOf(points));
-            engraving.appendChild(line);
-          });
-          board.appendChild(engraving);
-
-          PIECES.forEach(({ label, points }, piece) => {
-            const slot = document.createElement("button");
-            slot.type = "button";
-            slot.className = "slot";
-            slot.dataset.slot = String(piece);
-            slot.style.clipPath = polygonOf(points);
-            slot.setAttribute("aria-label", `Lugar do ${label}`);
-            slot.addEventListener("click", () => dropOn(piece));
-            slots.set(piece, slot);
-            board.appendChild(slot);
-          });
-        }
+        /* ---------- A tábua das peças ---------- */
 
         function buildTray() {
           tray.textContent = "";
+          buttons.clear();
+
           shuffled(PIECES.map((_, piece) => piece)).forEach((piece) => {
-            const { label, points } = PIECES[piece];
-            const box = boundingBox(points);
             const button = document.createElement("button");
             button.type = "button";
             button.className = "piece";
             button.dataset.piece = String(piece);
-            // --w e --h guardam o tamanho verdadeiro da peça, em fracções do quadrado.
-            button.style.setProperty("--w", String(box.width / UNIT));
-            button.style.setProperty("--h", String(box.height / UNIT));
-            button.style.setProperty("--tilt", `${TILTS[Math.floor(Math.random() * TILTS.length)]}deg`);
+            // --r é a roda que a peça desenha a girar, em fracções do quadrado:
+            // é o que faz o triângulo grande aparecer maior do que o pequeno.
+            button.style.setProperty("--r", String((SHAPES[piece].reach * 2) / UNIT));
             button.setAttribute("aria-pressed", "false");
-            button.setAttribute("aria-label", `Peça: ${label}`);
-            button.appendChild(createPieceSvg(piece, "tray"));
-            button.addEventListener("click", () => selectPiece(piece));
+            button.appendChild(createPieceSvg(piece, "loose"));
+            buttons.set(piece, button);
             tray.appendChild(button);
+            renderPiece(piece);
           });
         }
+
+        function renderPiece(piece) {
+          const button = buttons.get(piece);
+          if (!button) return;
+          button.style.setProperty("--angle", `${angles[piece]}deg`);
+          button.dataset.angle = String(angles[piece]);
+          button.setAttribute("aria-label", `Peça: ${describe(piece)}`);
+        }
+
+        /* ---------- Pegar, rodar e largar ---------- */
 
         function selectPiece(piece) {
           if (solved) return;
-          selected = selected === piece ? null : piece;
-          tray.querySelectorAll(".piece").forEach((button) => {
-            const isSelected = Number(button.dataset.piece) === selected;
+          selected = piece;
+          cursor = null;
+          buttons.forEach((button, number) => {
+            const isSelected = number === piece;
             button.classList.toggle("is-selected", isSelected);
             button.setAttribute("aria-pressed", String(isSelected));
           });
-          board.classList.toggle("is-armed", selected !== null);
-          announce(selected === null ? "Peça pousada." : "Peça na mão. Agora toca no lugar dela.");
+          rotateButton.disabled = false;
+          boardWrap.classList.add("is-armed");
+          renderAim();
+          announce(`${describe(piece)}. Roda-a e larga-a onde achas que é o lugar dela.`);
         }
 
-        /** Tenta pôr a peça que está na mão no lugar `slotNumber`. */
-        function dropOn(slotNumber) {
-          if (solved || selected === null) {
-            if (!solved) announce("Escolhe primeiro uma peça.");
-            return false;
+        function dropPiece() {
+          selected = null;
+          cursor = null;
+          buttons.forEach((button) => {
+            button.classList.remove("is-selected");
+            button.setAttribute("aria-pressed", "false");
+          });
+          rotateButton.disabled = true;
+          boardWrap.classList.remove("is-armed");
+          renderAim();
+        }
+
+        function rotateSelected() {
+          if (solved || selected === null) return;
+          angles[selected] = (angles[selected] + STEP) % 360;
+          renderPiece(selected);
+          renderAim();
+          announce(describe(selected));
+        }
+
+        /** Desenha (ou esconde) a mira: a peça na mão, dentro da caixa. */
+        function renderAim() {
+          if (selected === null || cursor === null) {
+            aim.hidden = true;
+            aim.textContent = "";
+            return;
           }
-          if (slots.get(slotNumber).classList.contains("is-filled")) return false;
+          aim.hidden = false;
+          aim.textContent = "";
+          aim.style.setProperty("--r", String((SHAPES[selected].reach * 2) / UNIT));
+          aim.style.setProperty("--angle", `${angles[selected]}deg`);
+          aim.style.left = `${(cursor.x * 100) / UNIT}%`;
+          aim.style.top = `${(cursor.y * 100) / UNIT}%`;
+          aim.appendChild(createPieceSvg(selected, "loose"));
+        }
+
+        /** Onde é que um ponto do ecrã cai, em unidades do quadrado. */
+        function boardPoint(clientX, clientY) {
+          const rect = boardWrap.getBoundingClientRect();
+          if (!rect.width || !rect.height) return null;
+          return {
+            x: ((clientX - rect.left) / rect.width) * UNIT,
+            y: ((clientY - rect.top) / rect.height) * UNIT,
+          };
+        }
+
+        function aimAt(point) {
+          if (selected === null || !point) return;
+          // A mira não sai da caixa.
+          cursor = {
+            x: Math.min(UNIT, Math.max(0, point.x)),
+            y: Math.min(UNIT, Math.max(0, point.y)),
+          };
+          renderAim();
+        }
+
+        /**
+         * Larga a peça que está na mão. Só assenta se o centro dela cair perto do
+         * lugar certo e se estiver direita — a forma podia encaixar de lado, mas
+         * a fotografia que ela leva ficaria virada ao contrário.
+         */
+        function dropAt(point) {
+          if (solved || selected === null || !point) return false;
 
           if (!gameStarted) {
             gameStarted = true;
@@ -950,21 +1016,30 @@
           }
 
           attempts += 1;
+          const piece = selected;
+          const { home } = SHAPES[piece];
+          const nearby = Math.hypot(point.x - home.x, point.y - home.y) <= TOLERANCE;
+          const straight = angles[piece] === 0;
 
-          if (slotNumber !== selected) {
-            const slot = slots.get(slotNumber);
-            slot.classList.add("is-wrong");
-            window.setTimeout(() => slot.classList.remove("is-wrong"), 400);
-            announce("Essa peça não é para aqui. Tenta outro lugar.");
-            return false;
+          if (nearby && straight) {
+            settle(piece);
+            return true;
           }
 
-          placePiece(selected);
-          return true;
+          boardWrap.classList.add("is-wrong");
+          window.setTimeout(() => boardWrap.classList.remove("is-wrong"), 420);
+          announce(
+            nearby
+              ? "Quase! A peça está torta — roda-a e tenta outra vez."
+              : "Aqui não. Procura outro sítio para esta peça.",
+          );
+          playThud();
+          return false;
         }
 
-        function placePiece(piece) {
-          tray.querySelector(`[data-piece="${piece}"]`)?.remove();
+        function settle(piece) {
+          buttons.get(piece)?.remove();
+          buttons.delete(piece);
 
           const holder = document.createElement("div");
           holder.className = "placed-piece";
@@ -972,13 +1047,7 @@
           holder.appendChild(createPieceSvg(piece, "board"));
           board.appendChild(holder);
 
-          const slot = slots.get(piece);
-          slot.classList.add("is-filled");
-          slot.disabled = true;
-          slot.setAttribute("aria-label", `${PIECES[piece].label}: já está no lugar`);
-
-          selected = null;
-          board.classList.remove("is-armed");
+          dropPiece();
           placed += 1;
           updateStats();
           playClick();
@@ -991,6 +1060,7 @@
           solved = true;
           stopTimer();
           board.classList.add("is-solved");
+          rotateButton.disabled = true;
           celebrationText.textContent = `Fizeste o tangram em ${attempts} ${attempts === 1 ? "tentativa" : "tentativas"} e ${formatTime(seconds)}. Muitos parabéns, ${PUZZLE.name}! ${PUZZLE.wish}`;
           announce("Tangram completo. Parabéns!");
           window.setTimeout(showCelebration, 650);
@@ -1020,67 +1090,109 @@
           setPreview(false);
           solved = false;
           gameStarted = false;
-          selected = null;
-          board.classList.remove("is-solved");
-          board.classList.remove("is-armed");
           placed = 0;
           attempts = 0;
           seconds = 0;
-          buildBoard();
+          board.classList.remove("is-solved");
+          board.querySelectorAll(".placed-piece").forEach((held) => held.remove());
+
+          // Nenhuma peça começa direita: todas têm de ser rodadas.
+          angles = PIECES.map(() => (1 + Math.floor(Math.random() * (TURNS - 1))) * STEP);
+
           buildTray();
+          dropPiece();
           updateStats();
           announce("As peças foram baralhadas. Boa sorte!");
         }
 
-        /* ---------- Arrastar as peças ---------- */
+        /* ---------- Rato, dedo e teclado ---------- */
+
+        // Na tábua: o primeiro toque pega na peça, os seguintes rodam-na.
+        tray.addEventListener("click", (event) => {
+          const button = event.target.closest?.(".piece");
+          if (!button || solved) return;
+          if (swallowClick) {   // isto foi o fim de um arrasto, não um toque
+            swallowClick = false;
+            return;
+          }
+          const piece = Number(button.dataset.piece);
+          if (selected === piece) rotateSelected();
+          else selectPiece(piece);
+        });
 
         tray.addEventListener("pointerdown", (event) => {
           const button = event.target.closest?.(".piece");
           if (!button || solved) return;
           const piece = Number(button.dataset.piece);
           if (selected !== piece) selectPiece(piece);
-
-          const ghost = document.createElement("div");
-          ghost.className = "drag-ghost";
-          ghost.style.setProperty("--w", button.style.getPropertyValue("--w"));
-          ghost.style.setProperty("--h", button.style.getPropertyValue("--h"));
-          ghost.appendChild(createPieceSvg(piece, "ghost"));
-          document.body.appendChild(ghost);
           button.classList.add("is-dragging");
-          drag = { ghost, button, moved: false };
-          moveGhost(event);
+          swallowClick = false;
+          drag = { button, moved: false };
         });
 
-        function moveGhost(event) {
-          if (!drag) return;
-          drag.ghost.style.left = `${event.clientX}px`;
-          drag.ghost.style.top = `${event.clientY}px`;
-        }
-
-        function stopDrag() {
-          if (!drag) return null;
-          const finished = drag;
-          finished.ghost.remove();
-          finished.button.classList.remove("is-dragging");
-          drag = null;
-          return finished;
-        }
-
         document.addEventListener("pointermove", (event) => {
-          if (!drag) return;
-          drag.moved = true;
-          moveGhost(event);
+          if (drag) {
+            drag.moved = true;
+            aimAt(boardPoint(event.clientX, event.clientY));
+            return;
+          }
+          // Sem arrastar, a mira segue o ponteiro enquanto ele anda na caixa.
+          if (selected !== null && event.target?.closest?.("#boardWrap")) {
+            aimAt(boardPoint(event.clientX, event.clientY));
+          }
         });
 
         document.addEventListener("pointerup", (event) => {
-          const finished = stopDrag();
-          if (!finished || !finished.moved) return;   // toque simples: a peça fica só na mão
-          const target = document.elementFromPoint?.(event.clientX, event.clientY);
-          const slot = target?.closest?.(".slot");
-          if (slot) dropOn(Number(slot.dataset.slot));
+          if (!drag) return;
+          const { button, moved } = drag;
+          button.classList.remove("is-dragging");
+          drag = null;
+          if (!moved) return;   // foi um toque simples: o clique trata dele
+
+          const point = boardPoint(event.clientX, event.clientY);
+          const onBoard = point && point.x >= 0 && point.x <= UNIT && point.y >= 0 && point.y <= UNIT;
+          if (onBoard) dropAt(point);
+          // Largada fora da caixa, a peça fica na mão — mas o clique que vem a
+          // seguir é o fim do arrasto e não pode passar por um toque na peça.
+          else swallowClick = true;
         });
 
-        document.addEventListener("pointercancel", stopDrag);
+        document.addEventListener("pointercancel", () => {
+          drag?.button.classList.remove("is-dragging");
+          drag = null;
+        });
+
+        // Na caixa: um toque larga ali a peça que está na mão.
+        boardWrap.addEventListener("click", (event) => {
+          if (selected === null) return;
+          const point = boardPoint(event.clientX, event.clientY);
+          if (!point) return;
+          aimAt(point);
+          dropAt(point);
+        });
+
+        // Com a caixa em foco, as setas movem a peça e o Enter larga-a.
+        boardWrap.addEventListener("keydown", (event) => {
+          if (selected === null) return;
+          const nudges = {
+            ArrowLeft: [-NUDGE, 0],
+            ArrowRight: [NUDGE, 0],
+            ArrowUp: [0, -NUDGE],
+            ArrowDown: [0, NUDGE],
+          };
+          if (nudges[event.key]) {
+            event.preventDefault();
+            const [dx, dy] = nudges[event.key];
+            const from = cursor ?? { x: UNIT / 2, y: UNIT / 2 };
+            aimAt({ x: from.x + dx, y: from.y + dy });
+            return;
+          }
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            if (cursor) dropAt(cursor);
+            else announce("Move a peça com as setas antes de a largares.");
+          }
+        });
 
         /* ---------- Sons ---------- */
 
@@ -1107,10 +1219,12 @@
         }
 
         const playClick = () => tone([880], 0.05);
+        const playThud = () => tone([180], 0.04);
         const playChime = () => tone([523.25, 659.25, 783.99], 0.12);
 
         /* ---------- Ligações ---------- */
 
+        rotateButton.addEventListener("click", rotateSelected);
         shuffleButton.addEventListener("click", newGame);
         previewButton.addEventListener("click", () => setPreview(!preview.classList.contains("visible")));
         playAgainButton.addEventListener("click", () => {
@@ -1124,7 +1238,7 @@
           if (event.key !== "Escape") return;
           setPreview(false);
           hideCelebration();
-          if (selected !== null) selectPiece(selected);
+          dropPiece();
         });
 
         newGame();
