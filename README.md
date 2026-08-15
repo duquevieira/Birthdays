@@ -3,6 +3,7 @@
 Um puzzle por pessoa, pensado primeiro para telemóvel e publicado através do GitHub Pages.
 Cada pessoa tem o seu jogo: uns são puzzles deslizantes, outros são de encaixe (jigsaw),
 outros de rotação — as peças ficam no sítio certo, mas tortas — e outros são tangrams.
+Há ainda histórias de arrastar, em que cenários e personagens formam tiras de banda desenhada.
 
 A página inicial ([`index.html`](index.html)) é apenas um índice com as ligações para cada puzzle.
 
@@ -39,6 +40,7 @@ se estragam uns aos outros — e um teste de cada suite verifica exactamente iss
 | Pedro Fernandes | Encaixe (jigsaw) 4 × 4 | [`puzzles/pedro-fernandes/`](puzzles/pedro-fernandes/index.html) | [`pedro-fernandes.test.js`](puzzles/pedro-fernandes/pedro-fernandes.test.js) |
 | Inês Arbués | Rotação 3 × 3 | [`puzzles/ines-arbues/`](puzzles/ines-arbues/index.html) | [`ines-arbues.test.js`](puzzles/ines-arbues/ines-arbues.test.js) |
 | Catarina Brito | Tangram de 7 peças | [`puzzles/catarina-brito/`](puzzles/catarina-brito/index.html) | [`catarina-brito.test.js`](puzzles/catarina-brito/catarina-brito.test.js) |
+| Catarina Silva | A festa da Cat em 3 tiras | [`puzzles/catarina-silva/`](puzzles/catarina-silva/index.html) | [`catarina-silva.test.js`](puzzles/catarina-silva/catarina-silva.test.js) |
 
 ## Acrescentar uma pessoa
 

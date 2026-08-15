@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ff6f4f" />
+    <meta name="description" content="Monta os três melhores momentos da festa da Cat e descobre quem celebra com ela em cada cenário." />
+    <link rel="canonical" href="https://duquevieira.github.io/Birthdays/puzzles/catarina-silva/" />
+    <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_PT" />
+    <meta property="og:url" content="https://duquevieira.github.io/Birthdays/puzzles/catarina-silva/" />
+    <meta property="og:title" content="Parabéns, Catarina Silva! 🎂" />
+    <meta property="og:description" content="Catarina, hoje és a estrela desta história. Que o teu novo capítulo seja uma aventura incrível!" />
+    <meta property="og:image" content="https://duquevieira.github.io/Birthdays/puzzles/catarina-silva/assets/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Parabéns, Catarina — três cenários de uma história especial" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Parabéns, Catarina Silva! 🎂" />
+    <meta name="twitter:description" content="Catarina, hoje és a estrela desta história. Que o teu novo capítulo seja uma aventura incrível!" />
+    <meta name="twitter:image" content="https://duquevieira.github.io/Birthdays/puzzles/catarina-silva/assets/og-image.jpg" />
+    <title>Parabéns, Catarina Silva! 🎂</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700;800&family=Fredoka:wght@600;700&display=swap");
+
+      :root {
+        --ink: #232536;
+        --muted: #6f7080;
+        --coral: #ff6f4f;
+        --coral-dark: #d84d36;
+        --sun: #ffd45f;
+        --sky: #75d7f4;
+        --mint: #74d6a4;
+        --paper: #fffdf8;
+        --line: #282837;
+        --shadow: 0 20px 50px rgba(49, 35, 55, 0.18);
+      }
+
+      * { box-sizing: border-box; }
+
+      html { min-height: 100%; background: #ffe5c4; }
+
+      body {
+        min-height: 100svh;
+        margin: 0;
+        color: var(--ink);
+        font-family: "DM Sans", system-ui, sans-serif;
+        background:
+          radial-gradient(circle at 8% 4%, rgba(255, 255, 255, 0.95) 0 4%, transparent 19%),
+          radial-gradient(circle at 92% 12%, rgba(117, 215, 244, 0.45) 0 8%, transparent 26%),
+          linear-gradient(155deg, #fff8e9 0%, #ffe5c4 52%, #ffcfc2 100%);
+        overflow-x: hidden;
+      }
+
+      button { font: inherit; }
+
+      .page-shell {
+        width: 100%;
+        margin: 0 auto;
+        padding: max(16px, env(safe-area-inset-top)) clamp(8px, 1.8vw, 24px) max(28px, env(safe-area-inset-bottom));
+      }
+
+      header { text-align: center; }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 5px;
+        color: var(--coral-dark);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before,
+      .eyebrow::after { content: "✦"; color: var(--sun); font-size: 0.9rem; }
+
+      h1 {
+        margin: 0;
+        font-family: "Fredoka", "DM Sans", sans-serif;
+        font-size: clamp(2.25rem, 9vw, 4.25rem);
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+      }
+
+      h1 span { color: var(--coral); }
+
+      .intro {
+        max-width: 680px;
+        margin: 10px auto 18px;
+        color: var(--muted);
+        font-size: clamp(0.82rem, 2.5vw, 0.96rem);
+        line-height: 1.45;
+      }
+
+      .orientation-tip {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: fit-content;
+        margin: -5px auto 13px;
+        padding: 7px 11px;
+        border: 2px solid rgba(35, 37, 54, 0.72);
+        border-radius: 999px;
+        color: #6b5838;
+        background: rgba(255, 212, 95, 0.68);
+        font-size: 0.68rem;
+        font-weight: 800;
+      }
+
+      .orientation-tip strong { font-size: 1rem; }
+
+      .game-card {
+        padding: clamp(10px, 2.5vw, 17px);
+        border: 2px solid rgba(35, 37, 54, 0.9);
+        border-radius: 26px;
+        background: rgba(255, 253, 248, 0.92);
+        box-shadow: var(--shadow), 6px 7px 0 rgba(35, 37, 54, 0.11);
+        transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      }
+
+      .game-card.won {
+        border-color: var(--coral-dark);
+        background: linear-gradient(150deg, rgba(255, 253, 248, 0.98), rgba(255, 238, 190, 0.96));
+        box-shadow: 0 22px 60px rgba(216, 77, 54, 0.24), 7px 8px 0 rgba(216, 77, 54, 0.18);
+      }
+
+      .game-card.won .progress strong { background: var(--mint); }
+
+      .game-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 0 3px 10px;
+      }
+
+      .progress {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .progress strong {
+        display: grid;
+        width: 30px;
+        height: 30px;
+        place-items: center;
+        border: 2px solid var(--line);
+        border-radius: 50%;
+        color: var(--ink);
+        background: var(--sun);
+        font-family: "Fredoka", sans-serif;
+        font-size: 0.95rem;
+        letter-spacing: 0;
+      }
+
+      .reset {
+        padding: 7px 11px;
+        border: 0;
+        border-radius: 999px;
+        color: var(--muted);
+        background: #f0ece6;
+        font-size: 0.72rem;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .reset:hover { color: var(--ink); background: #e5ded4; }
+
+      .strips { display: grid; gap: 10px; }
+
+      .strip {
+        position: relative;
+        aspect-ratio: 16 / 7;
+        min-height: 0;
+        overflow: hidden;
+        border: 3px solid var(--line);
+        border-radius: 18px;
+        background:
+          radial-gradient(circle at 20% 28%, rgba(117, 215, 244, 0.27) 0 8%, transparent 9%),
+          radial-gradient(circle at 78% 72%, rgba(255, 212, 95, 0.26) 0 10%, transparent 11%),
+          repeating-linear-gradient(-45deg, #fffdfa 0 13px, #f4f0e9 13px 26px);
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+        isolation: isolate;
+        outline: none;
+        transition: transform 150ms ease, box-shadow 150ms ease;
+      }
+
+      .strip::after {
+        position: absolute;
+        z-index: -1;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(14, 18, 30, 0.25), transparent 35% 65%, rgba(14, 18, 30, 0.2));
+        content: "";
+        opacity: 0;
+      }
+
+      .strip.has-set::after { opacity: 1; }
+
+      .strip:focus-visible,
+      .strip.drop-hover { box-shadow: 0 0 0 5px var(--sun); transform: translateY(-2px); }
+
+      .scene-image {
+        position: absolute;
+        z-index: -2;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .strip-number {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 3;
+        display: grid;
+        width: 27px;
+        height: 27px;
+        place-items: center;
+        border: 2px solid var(--line);
+        border-radius: 50%;
+        background: var(--paper);
+        font-family: "Fredoka", sans-serif;
+        font-size: 0.78rem;
+      }
+
+      .scene-label {
+        position: absolute;
+        top: 8px;
+        left: 42px;
+        z-index: 3;
+        max-width: calc(100% - 92px);
+        padding: 5px 10px;
+        border: 2px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 253, 248, 0.94);
+        font-family: "Fredoka", sans-serif;
+        font-size: clamp(0.68rem, 2vw, 0.8rem);
+        line-height: 1;
+      }
+
+      .strip-result {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 3;
+        display: grid;
+        width: 29px;
+        height: 29px;
+        place-items: center;
+        border: 2px solid var(--line);
+        border-radius: 50%;
+        background: var(--paper);
+        font-weight: 900;
+      }
+
+      .strip[data-result="correct"] .strip-result { background: var(--mint); }
+      .strip[data-result="wrong"] .strip-result { background: var(--coral); color: white; }
+      .game-card.won .strip[data-result="correct"] { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6), 0 0 0 3px var(--mint); }
+
+      .empty-hint {
+        position: absolute;
+        inset: 40px 12px 12px;
+        display: grid;
+        place-items: center;
+        color: #92909b;
+        font-family: "Fredoka", sans-serif;
+        font-size: clamp(0.72rem, 2.5vw, 0.9rem);
+        text-align: center;
+      }
+
+      .cast {
+        position: absolute;
+        inset: 37px 14px 9px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: clamp(5px, 2vw, 15px);
+      }
+
+      .cast-member {
+        position: relative;
+        width: min(42%, 150px);
+        aspect-ratio: 1;
+        padding: 0;
+        overflow: hidden;
+        border: 3px solid white;
+        border-radius: 48% 48% 18px 18px;
+        background: var(--paper);
+        box-shadow: 0 7px 0 rgba(35, 37, 54, 0.72), 0 12px 20px rgba(18, 20, 30, 0.27);
+        cursor: grab;
+        touch-action: none;
+      }
+
+      .cast-member:nth-child(2) { transform: translateY(-3px) rotate(1.5deg); }
+      .cast-member:first-child { transform: rotate(-1.5deg); }
+      .cast-member:active { cursor: grabbing; }
+
+      .cast-member img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+      .cast-member span {
+        position: absolute;
+        right: 4px;
+        bottom: 4px;
+        left: 4px;
+        overflow: hidden;
+        padding: 3px 5px;
+        border-radius: 7px;
+        color: white;
+        background: rgba(25, 25, 34, 0.78);
+        font-size: clamp(0.58rem, 2vw, 0.7rem);
+        font-weight: 800;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .tray { margin-top: 14px; }
+
+      .picker-area { position: relative; }
+
+      .game-card.won .tray {
+        filter: blur(4px);
+        opacity: 0.48;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .tray-group + .tray-group { margin-top: 12px; }
+
+      .tray-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin: 0 2px 7px;
+      }
+
+      .tray-heading h2 {
+        margin: 0;
+        font-family: "Fredoka", sans-serif;
+        font-size: 0.96rem;
+      }
+
+      .tray-heading span { color: var(--muted); font-size: 0.66rem; }
+
+      .token-row { display: grid; gap: 8px; }
+      .characters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .scenes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+      .source-token {
+        position: relative;
+        min-width: 0;
+        padding: 5px;
+        border: 2px solid var(--line);
+        border-radius: 14px;
+        color: var(--ink);
+        background: white;
+        box-shadow: 0 5px 0 rgba(35, 37, 54, 0.12);
+        cursor: grab;
+        touch-action: none;
+        transition: transform 120ms ease, box-shadow 120ms ease;
+      }
+
+      .source-token:hover { transform: translateY(-2px); box-shadow: 0 7px 0 rgba(35, 37, 54, 0.14); }
+      .source-token:active { cursor: grabbing; }
+      .source-token.selected { box-shadow: 0 0 0 4px var(--sun), 0 7px 0 rgba(35, 37, 54, 0.14); transform: translateY(-2px); }
+
+      .character-token img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 9px;
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      .token-name {
+        display: block;
+        overflow: hidden;
+        padding: 5px 1px 2px;
+        font-size: clamp(0.58rem, 2.3vw, 0.72rem);
+        font-weight: 800;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .scene-token {
+        height: var(--token-height, calc((100vw - 60px) / 4 + 24px));
+        min-height: 0;
+        overflow: hidden;
+        background-position: center;
+        background-size: cover;
+      }
+
+      .scene-token::before {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(transparent 25%, rgba(19, 20, 28, 0.82));
+        content: "";
+      }
+
+      .scene-token .token-name {
+        position: absolute;
+        right: 4px;
+        bottom: 4px;
+        left: 4px;
+        z-index: 1;
+        color: white;
+        white-space: normal;
+      }
+
+      .hint {
+        min-height: 1.4em;
+        margin: 12px 2px 0;
+        color: var(--muted);
+        font-size: 0.7rem;
+        text-align: center;
+      }
+
+      .win-message[hidden] { display: none; }
+
+      .win-message {
+        position: absolute;
+        z-index: 5;
+        top: 50%;
+        left: 50%;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: clamp(10px, 2vw, 18px);
+        width: min(calc(100% - 22px), 760px);
+        margin: 0;
+        padding: clamp(10px, 2vw, 16px);
+        overflow: hidden;
+        border: 3px solid var(--line);
+        border-radius: 20px;
+        background: linear-gradient(135deg, #fff7d8, #ffd98c);
+        box-shadow: 0 7px 0 rgba(35, 37, 54, 0.17);
+        transform: translate(-50%, -50%);
+      }
+
+      .win-message::before {
+        position: absolute;
+        inset: -80%;
+        background: repeating-conic-gradient(from 15deg, rgba(255, 111, 79, 0.09) 0 7deg, transparent 7deg 20deg);
+        content: "";
+      }
+
+      .win-message > * { position: relative; }
+
+      .win-photo {
+        width: clamp(58px, 8vw, 84px);
+        aspect-ratio: 1;
+        border: 3px solid white;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: 50% 18%;
+        box-shadow: 0 4px 0 var(--line);
+      }
+
+      .win-copy h2 { margin: 0 0 2px; font-family: "Fredoka", sans-serif; font-size: clamp(1.15rem, 3vw, 1.8rem); }
+      .win-copy p { margin: 0; color: #6b5838; font-size: clamp(0.7rem, 1.6vw, 0.9rem); line-height: 1.4; }
+
+      .play-again {
+        padding: 9px 13px;
+        border: 2px solid var(--line);
+        border-radius: 999px;
+        color: white;
+        background: var(--coral);
+        box-shadow: 0 4px 0 var(--line);
+        font-size: 0.72rem;
+        font-weight: 800;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .drag-ghost {
+        position: fixed;
+        z-index: 100;
+        width: 82px;
+        pointer-events: none;
+        opacity: 0.9;
+        transform: translate(-50%, -55%) rotate(3deg) scale(1.05);
+        filter: drop-shadow(0 12px 10px rgba(25, 22, 30, 0.28));
+      }
+
+      .drag-ghost.scene-token {
+        width: 144px;
+        height: 81px;
+        aspect-ratio: 16 / 9;
+      }
+
+      @media (min-width: 680px) {
+        .strips { grid-template-columns: repeat(3, 1fr); }
+        .strip { aspect-ratio: 16 / 10; }
+        .cast { inset: 38px 8px 10px; gap: clamp(3px, 0.8vw, 12px); }
+        .cast-member { width: min(42%, 170px); }
+        .tray { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
+        .tray-group + .tray-group { margin-top: 0; }
+        .hint { grid-column: 1 / -1; margin-top: 0; }
+        .strip-result { top: 8px; }
+      }
+
+      @media (orientation: portrait) and (max-width: 900px) {
+        .orientation-tip { display: inline-flex; }
+      }
+
+      @media (orientation: landscape) and (max-height: 650px) {
+        .page-shell { padding-top: 7px; padding-bottom: 12px; }
+        .eyebrow { margin-bottom: 1px; }
+        h1 { font-size: clamp(2rem, 7vh, 2.8rem); }
+        .intro { margin: 4px auto 8px; font-size: 0.76rem; }
+        .game-card { padding: 8px; border-radius: 20px; }
+        .game-bar { margin-bottom: 6px; }
+        .strip { aspect-ratio: 16 / 9; }
+        .tray { margin-top: 9px; }
+        .tray-heading { margin-bottom: 4px; }
+        .hint { display: none; }
+      }
+
+      @media (max-width: 520px) {
+        .win-message { grid-template-columns: auto minmax(0, 1fr); }
+        .play-again { grid-column: 1 / -1; width: 100%; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header>
+        <p class="eyebrow">O grande dia da Cat</p>
+        <h1>A festa da <span>Cat</span></h1>
+        <p class="intro">Monta os três melhores momentos do aniversário da Cat. Arrasta um cenário e duas pessoas para cada tira — as caras dizem-te quando acertaste.</p>
+        <p class="orientation-tip"><strong aria-hidden="true">↻</strong> Para jogar melhor, roda o telemóvel na horizontal.</p>
+      </header>
+
+      <main class="game-card" id="gameCard">
+        <div class="game-bar">
+          <div class="progress"><strong id="correctCount">0</strong> tiras certas</div>
+          <button class="reset" id="resetButton" type="button">Recomeçar</button>
+        </div>
+
+        <section class="strips" id="strips" aria-label="Os três momentos do aniversário da Cat">
+          <article class="strip" data-strip="0" data-result="empty" tabindex="0" aria-label="Tira 1, vazia"></article>
+          <article class="strip" data-strip="1" data-result="empty" tabindex="0" aria-label="Tira 2, vazia"></article>
+          <article class="strip" data-strip="2" data-result="empty" tabindex="0" aria-label="Tira 3, vazia"></article>
+        </section>
+
+        <div class="picker-area">
+          <section class="tray" id="pieceTray" aria-label="Peças para arrastar">
+            <div class="tray-group">
+              <div class="tray-heading"><h2>Personagens</h2></div>
+              <div class="token-row characters" id="characterTray"></div>
+            </div>
+            <div class="tray-group">
+              <div class="tray-heading"><h2>Cenários</h2><span>Um por tira</span></div>
+              <div class="token-row scenes" id="sceneTray"></div>
+            </div>
+            <p class="hint" id="hint" aria-live="polite">Arrasta uma peça — ou toca nela e depois numa tira.</p>
+          </section>
+
+          <section class="win-message" id="winMessage" aria-labelledby="winTitle" hidden>
+            <img class="win-photo" src="./assets/photo.jpg" alt="Cat" />
+            <div class="win-copy">
+              <h2 id="winTitle">Parabéns, Cat! 🎉</h2>
+              <p>Encontraste todos os momentos da tua festa. Que este novo ano venha cheio de jogos, golos, gargalhadas e pessoas especiais!</p>
+            </div>
+            <button class="play-again" id="playAgain" type="button">Jogar outra vez</button>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const CHARACTERS = {
+        cat: { name: "Cat" },
+        mickael: { name: "Mickael" },
+        maggie: { name: "Maggie" },
+        sarah: { name: "Sarah" },
+      };
+
+      const SETS = {
+        volleyball: { name: "Vólei" },
+        soccer: { name: "Futebol" },
+        "board-games": { name: "Jogos de tabuleiro" },
+      };
+
+      const SOLUTION = {
+        volleyball: ["cat", "maggie"],
+        soccer: ["cat", "sarah"],
+        "board-games": ["cat", "mickael"],
+      };
+
+      const storyStrips = [{ set: null, characters: [] }, { set: null, characters: [] }, { set: null, characters: [] }];
+      let selected = null;
+      let pointerDrag = null;
+      let audioContext = null;
+      let firstRender = true;
+      let previousWon = false;
+      let previousSignatures = ["", "", ""];
+      const soundEvents = [];
+
+      const characterTrayElement = document.querySelector("#characterTray");
+      const sceneTrayElement = document.querySelector("#sceneTray");
+      const hintElement = document.querySelector("#hint");
+      const gameCardElement = document.querySelector("#gameCard");
+      const winMessageElement = document.querySelector("#winMessage");
+      const pieceTrayElement = document.querySelector("#pieceTray");
+
+      function characterImage(character, set = null, emotion = "neutral") {
+        const suffix = set ? `${set}-${emotion}` : "neutral";
+        return `./assets/characters/${character}-${suffix}.webp`;
+      }
+
+      function setImage(set) {
+        return `./assets/sets/${set}.webp`;
+      }
+
+      function playSound(name) {
+        soundEvents.push(name);
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+
+        try {
+          audioContext ??= new AudioContextClass();
+          if (audioContext.state === "suspended") audioContext.resume();
+          const now = audioContext.currentTime;
+          const notes = name === "correct"
+            ? [[523, 0, 0.12, "sine"], [659, 0.1, 0.13, "sine"], [784, 0.2, 0.2, "sine"]]
+            : name === "failed"
+              ? [[190, 0, 0.18, "sawtooth"], [145, 0.14, 0.24, "sawtooth"]]
+              : [[523, 0, 0.14, "triangle"], [659, 0.1, 0.14, "triangle"], [784, 0.2, 0.16, "triangle"], [1047, 0.34, 0.34, "triangle"]];
+
+          notes.forEach(([frequency, delay, duration, type]) => {
+            const oscillator = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            const start = now + delay;
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(frequency, start);
+            gain.gain.setValueAtTime(0.0001, start);
+            gain.gain.exponentialRampToValueAtTime(name === "failed" ? 0.035 : 0.065, start + 0.018);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+            oscillator.connect(gain);
+            gain.connect(audioContext.destination);
+            oscillator.start(start);
+            oscillator.stop(start + duration + 0.02);
+          });
+        } catch {}
+      }
+
+      function signatureOf(strip) {
+        return `${strip.set ?? ""}|${strip.characters.slice().sort().join(",")}`;
+      }
+
+      function syncTokenHeights() {
+        const characterToken = characterTrayElement.querySelector(".character-token");
+        const height = characterToken?.getBoundingClientRect().height;
+        if (height) sceneTrayElement.style.setProperty("--token-height", `${height}px`);
+      }
+
+      function sameCharacters(first, second) {
+        return first.length === second.length && first.every((character) => second.includes(character));
+      }
+
+      function resultOf(strip) {
+        if (!strip.set || strip.characters.length < 2) return "empty";
+        return sameCharacters(strip.characters, SOLUTION[strip.set]) ? "correct" : "wrong";
+      }
+
+      function correctTotal() {
+        return storyStrips.filter((strip) => resultOf(strip) === "correct").length;
+      }
+
+      function choose(kind, value, token) {
+        selected = { kind, value };
+        document.querySelectorAll(".source-token.selected").forEach((item) => item.classList.remove("selected"));
+        token?.classList.add("selected");
+        hintElement.textContent = `${kind === "character" ? CHARACTERS[value].name : SETS[value].name}: escolhe agora uma tira.`;
+      }
+
+      function clearChoice() {
+        selected = null;
+        document.querySelectorAll(".source-token.selected").forEach((item) => item.classList.remove("selected"));
+        hintElement.textContent = "Arrasta uma peça — ou toca nela e depois numa tira.";
+      }
+
+      function dropItem(kind, value, stripIndex) {
+        const target = storyStrips[stripIndex];
+        if (!target) return;
+
+        if (kind === "set") {
+          storyStrips.forEach((strip, index) => {
+            if (index !== stripIndex && strip.set === value) strip.set = null;
+          });
+          target.set = value;
+        } else {
+          if (target.characters.includes(value)) {
+            clearChoice();
+            return;
+          }
+
+          if (value !== "cat") {
+            storyStrips.forEach((strip, index) => {
+              if (index !== stripIndex) strip.characters = strip.characters.filter((character) => character !== value);
+            });
+          }
+
+          if (target.characters.length >= 2) {
+            const partner = value === "cat" ? 0 : target.characters.findIndex((character) => character !== "cat");
+            target.characters.splice(partner < 0 ? 0 : partner, 1, value);
+          } else {
+            target.characters.push(value);
+          }
+        }
+
+        clearChoice();
+        render();
+      }
+
+      function tokenButton(kind, value, name) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `source-token ${kind === "character" ? "character-token" : "scene-token"}`;
+        button.dataset.kind = kind;
+        button.dataset.value = value;
+        button.draggable = false;
+        button.setAttribute("aria-label", `${name}, arrastar para uma tira`);
+        if (kind === "character") {
+          button.innerHTML = `<img src="${characterImage(value)}" alt="" /><span class="token-name">${name}</span>`;
+        } else {
+          button.style.backgroundImage = `url("${setImage(value)}")`;
+          button.innerHTML = `<span class="token-name">${name}</span>`;
+        }
+        button.addEventListener("click", () => {
+          if (!pointerDrag?.moved) choose(kind, value, button);
+        });
+        wireDrag(button);
+        return button;
+      }
+
+      function renderTray() {
+        characterTrayElement.replaceChildren(...Object.entries(CHARACTERS).map(([value, character]) => tokenButton("character", value, character.name)));
+        sceneTrayElement.replaceChildren(...Object.entries(SETS).map(([value, set]) => tokenButton("set", value, set.name)));
+        requestAnimationFrame(syncTokenHeights);
+      }
+
+      function renderStrip(element, strip, index) {
+        const result = resultOf(strip);
+        element.dataset.result = result;
+        element.classList.toggle("has-set", Boolean(strip.set));
+        const resultSymbol = result === "correct" ? "✓" : result === "wrong" ? "!" : "?";
+        const scene = strip.set ? `<img class="scene-image" src="${setImage(strip.set)}" alt="" />` : "";
+        const label = strip.set ? SETS[strip.set].name : "Escolhe um cenário";
+        const complete = Boolean(strip.set) && strip.characters.length === 2;
+        const cast = strip.characters.map((character) => {
+          const emotion = complete && result === "correct" && character === "cat" ? "happy" : complete ? "furious" : "neutral";
+          const image = complete ? characterImage(character, strip.set, emotion) : characterImage(character);
+          return `<button type="button" class="cast-member" data-kind="character" data-value="${character}" aria-label="${CHARACTERS[character].name}, arrastar para outra tira"><img src="${image}" alt="" /><span>${CHARACTERS[character].name}</span></button>`;
+        }).join("");
+        const empty = strip.characters.length ? "" : `<div class="empty-hint">Larga aqui duas personagens</div>`;
+
+        element.innerHTML = `${scene}<span class="strip-number">${index + 1}</span><span class="scene-label">${label}</span><span class="strip-result" aria-hidden="true">${resultSymbol}</span>${empty}<div class="cast">${cast}</div>`;
+        element.setAttribute("aria-label", `Tira ${index + 1}: ${label}; ${strip.characters.length ? strip.characters.map((character) => CHARACTERS[character].name).join(" e ") : "sem personagens"}`);
+        element.querySelectorAll(".cast-member").forEach((member) => {
+          member.addEventListener("click", (event) => {
+            event.stopPropagation();
+            choose("character", member.dataset.value, null);
+          });
+          wireDrag(member);
+        });
+      }
+
+      function render() {
+        document.querySelectorAll(".strip").forEach((element, index) => renderStrip(element, storyStrips[index], index));
+        const results = storyStrips.map(resultOf);
+        const signatures = storyStrips.map(signatureOf);
+        const total = results.filter((result) => result === "correct").length;
+        document.querySelector("#correctCount").textContent = total;
+        const won = total === 3;
+        gameCardElement.classList.toggle("won", won);
+        winMessageElement.hidden = !won;
+        pieceTrayElement.inert = won;
+        pieceTrayElement.setAttribute("aria-hidden", String(won));
+        if (won) hintElement.textContent = "A festa está completa — parabéns, Cat!";
+
+        if (!firstRender) {
+          if (won && !previousWon) {
+            playSound("winning");
+          } else {
+            results.forEach((result, index) => {
+              if (signatures[index] === previousSignatures[index]) return;
+              if (result === "correct") playSound("correct");
+              if (result === "wrong") playSound("failed");
+            });
+          }
+        }
+
+        firstRender = false;
+        previousWon = won;
+        previousSignatures = signatures;
+      }
+
+      function resetGame() {
+        storyStrips.forEach((strip) => {
+          strip.set = null;
+          strip.characters = [];
+        });
+        gameCardElement.classList.remove("won");
+        winMessageElement.hidden = true;
+        pieceTrayElement.inert = false;
+        pieceTrayElement.setAttribute("aria-hidden", "false");
+        clearChoice();
+        render();
+      }
+
+      function wireDrag(element) {
+        element.addEventListener("pointerdown", (event) => {
+          if (event.button !== undefined && event.button !== 0) return;
+          pointerDrag = {
+            kind: element.dataset.kind,
+            value: element.dataset.value,
+            startX: event.clientX,
+            startY: event.clientY,
+            moved: false,
+            source: element,
+            ghost: null,
+          };
+        });
+      }
+
+      function cancelPointerDrag() {
+        pointerDrag?.ghost?.remove();
+        pointerDrag = null;
+        document.querySelectorAll(".strip.drop-hover").forEach((strip) => strip.classList.remove("drop-hover"));
+      }
+
+      document.addEventListener("pointermove", (event) => {
+        if (!pointerDrag) return;
+        const distance = Math.hypot(event.clientX - pointerDrag.startX, event.clientY - pointerDrag.startY);
+        if (!pointerDrag.moved && distance < 8) return;
+        pointerDrag.moved = true;
+        if (!pointerDrag.ghost) {
+          pointerDrag.ghost = pointerDrag.source.cloneNode(true);
+          pointerDrag.ghost.classList.add("drag-ghost");
+          pointerDrag.ghost.removeAttribute("id");
+          document.body.append(pointerDrag.ghost);
+        }
+        pointerDrag.ghost.style.left = `${event.clientX}px`;
+        pointerDrag.ghost.style.top = `${event.clientY}px`;
+        document.querySelectorAll(".strip.drop-hover").forEach((strip) => strip.classList.remove("drop-hover"));
+        document.elementFromPoint(event.clientX, event.clientY)?.closest(".strip")?.classList.add("drop-hover");
+      });
+
+      document.addEventListener("pointerup", (event) => {
+        if (!pointerDrag) return;
+        const dragged = pointerDrag;
+        pointerDrag = null;
+        dragged.ghost?.remove();
+        document.querySelectorAll(".strip.drop-hover").forEach((strip) => strip.classList.remove("drop-hover"));
+        if (!dragged.moved) return;
+        const target = document.elementFromPoint(event.clientX, event.clientY)?.closest(".strip");
+        if (target) dropItem(dragged.kind, dragged.value, Number(target.dataset.strip));
+      });
+
+      document.addEventListener("pointercancel", cancelPointerDrag);
+      window.addEventListener("blur", cancelPointerDrag);
+
+      document.querySelectorAll(".strip").forEach((strip) => {
+        strip.addEventListener("click", () => {
+          if (selected) dropItem(selected.kind, selected.value, Number(strip.dataset.strip));
+        });
+        strip.addEventListener("keydown", (event) => {
+          if ((event.key === "Enter" || event.key === " ") && selected) {
+            event.preventDefault();
+            dropItem(selected.kind, selected.value, Number(strip.dataset.strip));
+          }
+        });
+        strip.addEventListener("dragover", (event) => {
+          event.preventDefault();
+          strip.classList.add("drop-hover");
+        });
+        strip.addEventListener("dragleave", () => strip.classList.remove("drop-hover"));
+        strip.addEventListener("drop", (event) => {
+          event.preventDefault();
+          strip.classList.remove("drop-hover");
+          try {
+            const item = JSON.parse(event.dataTransfer.getData("text/plain"));
+            dropItem(item.kind, item.value, Number(strip.dataset.strip));
+          } catch {}
+        });
+      });
+
+      document.querySelector("#resetButton").addEventListener("click", resetGame);
+      document.querySelector("#playAgain").addEventListener("click", resetGame);
+      window.addEventListener("resize", syncTokenHeights);
+      renderTray();
+      render();
+
+      window.storyPuzzle = { strips: storyStrips, dropItem, resultOf, resetGame, solution: SOLUTION, soundEvents };
+    </script>
+  </body>
+</html>
