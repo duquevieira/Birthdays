@@ -3,7 +3,8 @@
 Um puzzle por pessoa, pensado primeiro para telemóvel e publicado através do GitHub Pages.
 Cada pessoa tem o seu jogo: uns são puzzles deslizantes, outros são de encaixe (jigsaw),
 outros de rotação — as peças ficam no sítio certo, mas tortas — e outros são tangrams.
-Há ainda histórias de arrastar, em que cenários e personagens formam tiras de banda desenhada.
+Há ainda histórias de arrastar, em que cenários e personagens formam tiras de banda
+desenhada, e um Tetris em que cada peça que assenta destapa uma parte da fotografia.
 
 A página inicial ([`index.html`](index.html)) é apenas um índice com as ligações para cada puzzle.
 
@@ -41,6 +42,7 @@ se estragam uns aos outros — e um teste de cada suite verifica exactamente iss
 | Inês Arbués | Rotação 3 × 3 | [`puzzles/ines-arbues/`](puzzles/ines-arbues/index.html) | [`ines-arbues.test.js`](puzzles/ines-arbues/ines-arbues.test.js) |
 | Catarina Brito | Tangram de 7 peças | [`puzzles/catarina-brito/`](puzzles/catarina-brito/index.html) | [`catarina-brito.test.js`](puzzles/catarina-brito/catarina-brito.test.js) |
 | Catarina Silva | A festa da Cat em 3 tiras | [`puzzles/catarina-silva/`](puzzles/catarina-silva/index.html) | [`catarina-silva.test.js`](puzzles/catarina-silva/catarina-silva.test.js) |
+| Maria Vasconcelos | Tetris de 10 linhas | [`puzzles/maria-vasconcelos/`](puzzles/maria-vasconcelos/index.html) | [`maria-vasconcelos.test.js`](puzzles/maria-vasconcelos/maria-vasconcelos.test.js) |
 
 ## Acrescentar uma pessoa
 
@@ -66,6 +68,17 @@ vêem, e a única pista é o bocado de fotografia que cada peça leva. Nenhuma p
 começa direita — o primeiro toque pega nela, os seguintes rodam-na `STEP` graus —
 e só assenta se for largada a menos de `TOLERANCE` do sítio dela **e** estiver
 direita: a forma até encaixaria de lado, mas a fotografia ficaria virada.
+
+O Tetris joga-se num poço de `COLS` × `ROWS` que tem a forma da fotografia (8 × 12
+é 2 : 3, tal como ela), por isso cada casa mostra o seu pedaço sem esticar nada:
+as peças a cair são da sua cor, e ao assentarem destapam a fotografia por baixo.
+Ganha-se ao fim de `GOAL` linhas, e aí o poço inteiro passa a fotografia: fica uns
+segundos à vista antes de a festa entrar, e vai também dentro do cartão. As sete
+peças não têm tabela de rotação nenhuma — cada uma é uma lista de casas dentro de
+uma caixa quadrada, e rodar é girar a caixa. Joga-se com os botões, com as setas
+do teclado, ou com o dedo por cima do poço: arrastar para o lado move, arrastar
+para baixo larga a peça, e um toque roda-a. O botão grande começa o jogo e, daí
+em diante, é o de pausa.
 
 ## Testes
 
