@@ -4,7 +4,8 @@ Um puzzle por pessoa, pensado primeiro para telemóvel e publicado através do G
 Cada pessoa tem o seu jogo: uns são puzzles deslizantes, outros são de encaixe (jigsaw),
 outros de rotação — as peças ficam no sítio certo, mas tortas — e outros são tangrams.
 Há ainda histórias de arrastar, em que cenários e personagens formam tiras de banda
-desenhada, e um Tetris em que cada peça que assenta destapa uma parte da fotografia.
+desenhada, um Tetris em que cada peça que assenta destapa uma parte da fotografia, e
+um minigolfe em que cada buraco fechado levanta a relva de um bocado dela.
 
 A página inicial ([`index.html`](index.html)) é apenas um índice com as ligações para cada puzzle.
 
@@ -43,6 +44,7 @@ se estragam uns aos outros — e um teste de cada suite verifica exactamente iss
 | Catarina Brito | Tangram de 7 peças | [`puzzles/catarina-brito/`](puzzles/catarina-brito/index.html) | [`catarina-brito.test.js`](puzzles/catarina-brito/catarina-brito.test.js) |
 | Catarina Silva | A festa da Cat em 3 tiras | [`puzzles/catarina-silva/`](puzzles/catarina-silva/index.html) | [`catarina-silva.test.js`](puzzles/catarina-silva/catarina-silva.test.js) |
 | Maria Vasconcelos | Tetris de 10 linhas | [`puzzles/maria-vasconcelos/`](puzzles/maria-vasconcelos/index.html) | [`maria-vasconcelos.test.js`](puzzles/maria-vasconcelos/maria-vasconcelos.test.js) |
+| João Freitas | Minigolfe de 9 buracos | [`puzzles/joao-freitas/`](puzzles/joao-freitas/index.html) | [`joao-freitas.test.js`](puzzles/joao-freitas/joao-freitas.test.js) |
 
 ## Acrescentar uma pessoa
 
@@ -79,6 +81,20 @@ uma caixa quadrada, e rodar é girar a caixa. Joga-se com os botões, com as set
 do teclado, ou com o dedo por cima do poço: arrastar para o lado move, arrastar
 para baixo larga a peça, e um toque roda-a. O botão grande começa o jogo e, daí
 em diante, é o de pausa.
+
+O minigolfe joga-se no mesmo quadrado da fotografia: por baixo está ela, por cima
+os nove bocados de relva que a tapam, e cada buraco fechado levanta um. O campo
+mede sempre 100 × 100, seja qual for o ecrã, e é nessas unidades que estão escritos
+a bola, o copo e os obstáculos de cada um dos buracos da constante `HOLES`.
+
+A bola trava a um ritmo constante, como na relva, e por isso a distância de uma
+tacada é só velocidade² / (2 × `TRAVAGEM`): a mesma força faz sempre o mesmo
+caminho. Cada tacada resolve-se toda de uma vez — o caminho fica guardado ponto a
+ponto e só depois é que a bola o percorre no ecrã —, por isso o que se vê é
+exactamente o que a física deu, sem depender do ritmo do desenho. Todos os buracos
+têm uma linha directa da bola até ao copo: as paredes, a areia e a água castigam a
+pontaria torta, não a certeira. Puxa-se a bola para trás e larga-se, como no
+minigolfe a sério, ou afina-se com as setas e o cursor da força.
 
 ## Testes
 
