@@ -4,8 +4,9 @@ Um puzzle por pessoa, pensado primeiro para telemóvel e publicado através do G
 Cada pessoa tem o seu jogo: uns são puzzles deslizantes, outros são de encaixe (jigsaw),
 outros de rotação — as peças ficam no sítio certo, mas tortas — e outros são tangrams.
 Há ainda histórias de arrastar, em que cenários e personagens formam tiras de banda
-desenhada, um Tetris em que cada peça que assenta destapa uma parte da fotografia, e
-um minigolfe em que cada buraco fechado levanta a relva de um bocado dela.
+desenhada, um Tetris em que cada peça que assenta destapa uma parte da fotografia,
+um minigolfe em que cada buraco fechado levanta a relva de um bocado dela, e um
+Pac-Man de super-heróis em que cada pastilha comida acende a casa por onde passou.
 
 A página inicial ([`index.html`](index.html)) é apenas um índice com as ligações para cada puzzle.
 
@@ -45,6 +46,7 @@ se estragam uns aos outros — e um teste de cada suite verifica exactamente iss
 | Catarina Silva | A festa da Cat em 3 tiras | [`puzzles/catarina-silva/`](puzzles/catarina-silva/index.html) | [`catarina-silva.test.js`](puzzles/catarina-silva/catarina-silva.test.js) |
 | Maria Vasconcelos | Tetris de 10 linhas | [`puzzles/maria-vasconcelos/`](puzzles/maria-vasconcelos/index.html) | [`maria-vasconcelos.test.js`](puzzles/maria-vasconcelos/maria-vasconcelos.test.js) |
 | João Freitas | Minigolfe de 9 buracos | [`puzzles/joao-freitas/`](puzzles/joao-freitas/index.html) | [`joao-freitas.test.js`](puzzles/joao-freitas/joao-freitas.test.js) |
+| Diogo & Bernardo | Pac-Man de 104 pastilhas | [`puzzles/diogo-bernardo/`](puzzles/diogo-bernardo/index.html) | [`diogo-bernardo.test.js`](puzzles/diogo-bernardo/diogo-bernardo.test.js) |
 
 ## Acrescentar uma pessoa
 
@@ -95,6 +97,28 @@ exactamente o que a física deu, sem depender do ritmo do desenho. Todos os bura
 têm uma linha directa da bola até ao copo: as paredes, a areia e a água castigam a
 pontaria torta, não a certeira. Puxa-se a bola para trás e larga-se, como no
 minigolfe a sério, ou afina-se com as setas e o cursor da força.
+
+O Pac-Man é o único puzzle de duas pessoas, e a página é uma capa de banda
+desenhada: contornos grossos, sombras duras e o balão de estrela que salta a cada
+poder. O labirinto está escrito casa a casa na constante `MAZE` — `#` é parede,
+`-` é a porta do covil, `.` é pastilha, `o` é uma pastilha de poder e o espaço é o
+chão do covil. São 12 × 18 casas (2 : 3, tal como a fotografia), e as duas pontas
+da linha do meio estão abertas: é o túnel que dá a volta ao tabuleiro.
+
+Cada pastilha comida levanta a tinta da casa onde estava, e é assim que a
+fotografia aparece — com a forma do labirinto. Comidas as 104, caem também as
+paredes e a fotografia fica inteira.
+
+Só um dos dois heróis está em campo de cada vez: cada pastilha de poder passa o
+turno ao outro **e** põe os quatro vilões em fuga, por isso vale a pena guardá-las
+para quando eles apertam. Os vilões não sorteiam nada — um vai a direito atrás do
+herói, outro corta-lhe o caminho quatro casas à frente, outro apanha-o pelo lado
+oposto ao do primeiro, e o último só se atreve quando o herói está a mais de
+`SHY_RANGE` casas. Andam três casas em cada quatro do herói, metade disso quando
+fogem, e desatam a correr quando lhes sobram só os olhos a caminho do covil.
+
+Perder não apaga nada: os três heróis voltam, o labirinto fica como estava e
+continua-se de onde se ia.
 
 ## Testes
 
