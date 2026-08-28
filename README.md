@@ -5,8 +5,10 @@ Cada pessoa tem o seu jogo: uns são puzzles deslizantes, outros são de encaixe
 outros de rotação — as peças ficam no sítio certo, mas tortas — e outros são tangrams.
 Há ainda histórias de arrastar, em que cenários e personagens formam tiras de banda
 desenhada, um Tetris em que cada peça que assenta destapa uma parte da fotografia,
-um minigolfe em que cada buraco fechado levanta a relva de um bocado dela, e um
-Pac-Man de super-heróis em que cada pastilha comida acende a casa por onde passou.
+um minigolfe em que cada buraco fechado levanta a relva de um bocado dela, um
+Pac-Man de super-heróis em que cada pastilha comida acende a casa por onde passou,
+e um jogo das caixinhas para dois em que cada caixa fechada destapa a fotografia
+de quem a fechou.
 
 A página inicial ([`index.html`](index.html)) é apenas um índice com as ligações para cada puzzle.
 
@@ -47,6 +49,7 @@ se estragam uns aos outros — e um teste de cada suite verifica exactamente iss
 | Maria Vasconcelos | Tetris de 10 linhas | [`puzzles/maria-vasconcelos/`](puzzles/maria-vasconcelos/index.html) | [`maria-vasconcelos.test.js`](puzzles/maria-vasconcelos/maria-vasconcelos.test.js) |
 | João Freitas | Minigolfe de 9 buracos | [`puzzles/joao-freitas/`](puzzles/joao-freitas/index.html) | [`joao-freitas.test.js`](puzzles/joao-freitas/joao-freitas.test.js) |
 | Diogo & Bernardo | Pac-Man de 104 pastilhas | [`puzzles/diogo-bernardo/`](puzzles/diogo-bernardo/index.html) | [`diogo-bernardo.test.js`](puzzles/diogo-bernardo/diogo-bernardo.test.js) |
+| Filipe & Francisco | Caixinhas de 4 × 6 | [`puzzles/filipe-francisco/`](puzzles/filipe-francisco/index.html) | [`filipe-francisco.test.js`](puzzles/filipe-francisco/filipe-francisco.test.js) |
 
 ## Acrescentar uma pessoa
 
@@ -119,6 +122,28 @@ fogem, e desatam a correr quando lhes sobram só os olhos a caminho do covil.
 
 Perder não apaga nada: os três heróis voltam, o labirinto fica como estava e
 continua-se de onde se ia.
+
+As caixinhas são o jogo do caderno da escola, e são o segundo puzzle de duas
+pessoas: pontos, riscos, e quem fecha o quarto lado de uma caixa fica com ela
+**e joga outra vez** — é daí que vêm as cadeias e a vontade de dar duas caixas
+para ganhar oito. O campo tem `COLS` × `ROWS` caixas, e 4 × 6 é 2 : 3, tal como
+as fotografias: dá 24 caixas, 58 riscos e 35 pontos.
+
+O que muda para o jogo do papel é o que está por baixo. Cada caixa fechada
+destapa esse bocado da fotografia de quem a fechou, e como as duas fotografias
+estão cortadas na mesma grelha — e as duas pessoas enquadradas da mesma maneira —
+o mosaico que cresce é uma quimera, metade dragão, metade estátua. O território
+de cada um é o resultado: não é preciso ler o placar para saber quem vai ganhando.
+Fechadas as 24, caem os riscos e os pontos e fica só o mosaico, uns segundos à
+vista antes de a festa entrar.
+
+Não há sorteio nenhum: no primeiro jogo começa o Filipe, e o botão de novo jogo
+passa a estreia ao outro. Cada risco é um botão com uma barra fina mas com 26 px
+de área de toque, para caber num dedo sem enganos.
+
+Esta pasta tem três fotografias em vez de uma: `photo-a.jpg` e `photo-b.jpg` são
+as que o campo destapa, e `photo.jpg` é o retrato dos dois que a página inicial
+mostra no seu círculo.
 
 ## Testes
 
