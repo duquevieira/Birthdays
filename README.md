@@ -5,7 +5,9 @@ Cada pessoa tem o seu jogo: uns são puzzles deslizantes, outros são de encaixe
 outros de rotação — as peças ficam no sítio certo, mas tortas — e outros são tangrams.
 Há ainda histórias de arrastar, em que cenários e personagens formam tiras de banda
 desenhada, um Tetris em que cada peça que assenta destapa uma parte da fotografia,
-um minigolfe em que cada buraco fechado levanta a relva de um bocado dela, um
+um minigolfe em que cada buraco fechado levanta a relva de um bocado dela,
+um golfe deslizante, em que a bola nunca pára a meio e a relva se levanta por
+onde ela passa, um
 Pac-Man de super-heróis em que cada pastilha comida acende a casa por onde passou,
 e um jogo das caixinhas para dois em que cada caixa fechada destapa a fotografia
 de quem a fechou.
@@ -50,6 +52,7 @@ se estragam uns aos outros — e um teste de cada suite verifica exactamente iss
 | João Freitas | Minigolfe de 9 buracos | [`puzzles/joao-freitas/`](puzzles/joao-freitas/index.html) | [`joao-freitas.test.js`](puzzles/joao-freitas/joao-freitas.test.js) |
 | Diogo & Bernardo | Pac-Man de 104 pastilhas | [`puzzles/diogo-bernardo/`](puzzles/diogo-bernardo/index.html) | [`diogo-bernardo.test.js`](puzzles/diogo-bernardo/diogo-bernardo.test.js) |
 | Filipe & Francisco | Caixinhas de 4 × 6 | [`puzzles/filipe-francisco/`](puzzles/filipe-francisco/index.html) | [`filipe-francisco.test.js`](puzzles/filipe-francisco/filipe-francisco.test.js) |
+| Manuel Gomes | Golfe deslizante de 9 buracos | [`puzzles/manuel-gomes/`](puzzles/manuel-gomes/index.html) | [`manuel-gomes.test.js`](puzzles/manuel-gomes/manuel-gomes.test.js) |
 
 ## Acrescentar uma pessoa
 
@@ -100,6 +103,30 @@ exactamente o que a física deu, sem depender do ritmo do desenho. Todos os bura
 têm uma linha directa da bola até ao copo: as paredes, a areia e a água castigam a
 pontaria torta, não a certeira. Puxa-se a bola para trás e larga-se, como no
 minigolfe a sério, ou afina-se com as setas e o cursor da força.
+
+O golfe do Manuel é um puzzle e não tem física nenhuma: nove tabuleiros de
+6 × 6, escritos casa a casa na constante `HOLES` — `.` é relva, `T` uma árvore,
+`S` areia, `~` água, `O` o copo e `B` o sítio de onde a bola parte, tal como o
+labirinto do Pac-Man. Joga-se com as quatro setas, com o teclado, ou arrastando
+o dedo por cima do campo para o lado a que se quer mandar a bola.
+
+A regra é uma só: **a bola desliza até bater em alguma coisa e nunca pára a meio
+do caminho**. É daí que vem o puzzle — são as árvores que dizem onde a bola pode
+ficar, e chegar ao copo é encontrar a ordem certa das quatro setas. A areia
+agarra-a na primeira casa que ela pisa, a água custa uma tacada e manda-a para
+trás, e o copo apanha-a de passagem, sem ser preciso parar em cima dele. Bater
+contra o que está encostado não conta tacada nenhuma.
+
+O par não está escrito em lado nenhum: a página resolve cada buraco à largura e
+o par é o caminho mais curto que encontrar. Os testes fazem a mesma conta por si,
+lendo o tabuleiro tal como ele está desenhado na página, e confirmam que os dois
+chegam ao mesmo número — 2, 3, 3, 4, 4, 4, 5, 5, 5, que dá 35 no campo todo.
+Nenhum dos nove tem beco: de qualquer casa onde a bola pare, o copo continua a
+poder ser alcançado, e por isso nunca é preciso recomeçar o buraco.
+
+O tabuleiro e a fotografia são a mesma grelha de 36 casas: a relva levanta-se
+por onde a bola passa, e é o rasto das voltas — certas e erradas — que vai
+destapando a fotografia. Fechados os nove buracos, levanta-se o que sobrar.
 
 O Pac-Man é o único puzzle de duas pessoas, e a página é uma capa de banda
 desenhada: contornos grossos, sombras duras e o balão de estrela que salta a cada
