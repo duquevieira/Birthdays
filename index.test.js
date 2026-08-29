@@ -69,7 +69,9 @@ describe("Página inicial", () => {
     );
 
     texts.forEach((parts) => parts.forEach((text) => expect(text).not.toBe("")));
-    ["nome", "tipo de puzzle", "data"].forEach((_, part) => {
+    // O nome e o tipo de puzzle são de cada pessoa; a data pode repetir-se,
+    // porque há pessoas que fazem anos no mesmo dia.
+    ["nome", "tipo de puzzle"].forEach((_, part) => {
       const values = texts.map((parts) => parts[part]);
       expect(new Set(values).size).toBe(values.length);
     });
