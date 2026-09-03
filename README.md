@@ -9,8 +9,9 @@ um minigolfe em que cada buraco fechado levanta a relva de um bocado dela,
 um golfe deslizante, em que a bola nunca pára a meio e a relva se levanta por
 onde ela passa, um
 Pac-Man de super-heróis em que cada pastilha comida acende a casa por onde passou,
-e um jogo das caixinhas para dois em que cada caixa fechada destapa a fotografia
-de quem a fechou.
+um jogo das caixinhas para dois em que cada caixa fechada destapa a fotografia
+de quem a fechou, e um Space Invaders de golfe em que cada ave derrubada levanta
+um bocado da relva que tapa a fotografia.
 
 A página inicial ([`index.html`](index.html)) é apenas um índice com as ligações para cada puzzle.
 
@@ -53,6 +54,7 @@ se estragam uns aos outros — e um teste de cada suite verifica exactamente iss
 | Diogo & Bernardo | Pac-Man de 104 pastilhas | [`puzzles/diogo-bernardo/`](puzzles/diogo-bernardo/index.html) | [`diogo-bernardo.test.js`](puzzles/diogo-bernardo/diogo-bernardo.test.js) |
 | Filipe & Francisco | Caixinhas de 4 × 6 | [`puzzles/filipe-francisco/`](puzzles/filipe-francisco/index.html) | [`filipe-francisco.test.js`](puzzles/filipe-francisco/filipe-francisco.test.js) |
 | Manuel Gomes | Golfe deslizante de 9 buracos | [`puzzles/manuel-gomes/`](puzzles/manuel-gomes/index.html) | [`manuel-gomes.test.js`](puzzles/manuel-gomes/manuel-gomes.test.js) |
+| Adão Araújo | Invasores do green, 4 vagas | [`puzzles/adao-araujo/`](puzzles/adao-araujo/index.html) | [`adao-araujo.test.js`](puzzles/adao-araujo/adao-araujo.test.js) |
 
 ## Acrescentar uma pessoa
 
@@ -171,6 +173,35 @@ de área de toque, para caber num dedo sem enganos.
 Esta pasta tem três fotografias em vez de uma: `photo-a.jpg` e `photo-b.jpg` são
 as que o campo destapa, e `photo.jpg` é o retrato dos dois que a página inicial
 mostra no seu círculo.
+
+Os invasores do green são um Space Invaders de golfe. A nave é **o taco** — uma
+bola em cima do tee, que sobe pela coluna onde estiver —, os invasores são **as
+aves do golfe** (uma linha de albatrozes a valer 30, uma de águias a valer 20 e
+duas de birdies a valer 10), o que elas largam são **ovos**, e os abrigos são
+**três bunkers de areia**, cada bloco com `SAND_LAYERS` camadas. De vez em quando
+atravessa o cimo do campo **um buggy**, que vale `BUGGY_POINTS` a quem lhe acertar.
+
+O campo tem `COLS` × `ROWS` casas (16 × 24 é 2 : 3, tal como a fotografia) e a
+relva que a tapa é a mesma forma em casas maiores: `TURF_COLS` × `TURF_ROWS` dá 96
+bocados, cortados às listas como um green a sério. As contas são feitas para
+casarem: `WAVES` vagas de `FLIGHT_COLS` × `FLIGHT_ROWS` aves dão exactamente 96
+aves — uma por cada bocado de relva —, e cada ave que cai levanta o bocado mais
+perto de onde caiu. Derrubada a última, não sobra relva nenhuma por levantar, e é
+por isso que há um teste só para essa multiplicação.
+
+A revoada anda como no jogo de sempre: um passo de lado de cada vez, e quando a
+ave da ponta chega à berma toda a revoada vira costas e desce uma casa — por cima
+da areia, se a areia lá estiver. Quanto menos aves restam, mais depressa andam, de
+`MARCH_SLOW` até `MARCH_FAST` milissegundos por passo, e cada vaga começa uma casa
+mais perto do green do que a anterior. Chegarem à linha `LANDING_ROW` acaba o jogo;
+os ovos só custam um dos `LIVES` tacos.
+
+As aves ocupam duas casas e vão de duas em duas, por isso não há coluna nenhuma de
+onde não se possa acertar em alguma — e entre duas aves na mesma coluna a bola leva
+sempre a mais baixa, a que vem à frente. Há uma bola no ar de cada vez. Joga-se com
+os botões, com as setas do teclado (espaço ou seta para cima batem na bola), ou com
+o dedo por cima do campo: o taco segue o dedo e a bola parte quando se levanta.
+
 
 ## Testes
 

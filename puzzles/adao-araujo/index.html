@@ -1,0 +1,1732 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4fbf6" />
+    <meta name="description" content="Um Space Invaders de golfe: as aves invadem o green e cada uma que cai levanta um pedaço da fotografia. Limpa as quatro vagas." />
+    <link rel="canonical" href="https://duquevieira.github.io/Birthdays/puzzles/adao-araujo/" />
+    <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_PT" />
+    <meta property="og:url" content="https://duquevieira.github.io/Birthdays/puzzles/adao-araujo/" />
+    <meta property="og:title" content="Parabéns, Adão Araújo! 🎂" />
+    <meta property="og:description" content="Um Space Invaders de golfe: as aves invadem o green e cada uma que cai levanta um pedaço da fotografia. Limpa as quatro vagas." />
+    <meta property="og:image" content="https://duquevieira.github.io/Birthdays/puzzles/adao-araujo/assets/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Parabéns, Adão — um puzzle especial de aniversário" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Parabéns, Adão Araújo! 🎂" />
+    <meta name="twitter:description" content="Um Space Invaders de golfe: as aves invadem o green e cada uma que cai levanta um pedaço da fotografia. Limpa as quatro vagas." />
+    <meta name="twitter:image" content="https://duquevieira.github.io/Birthdays/puzzles/adao-araujo/assets/og-image.jpg" />
+    <title>Parabéns, Adão Araújo! 🎂</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap");
+
+      /*
+       * As cores saem todas da fotografia: o verde e o branco do equipamento, a
+       * relva cortada do green, o vermelho da bandeira e o amarelo da haste.
+       */
+      :root {
+        --ink: #17352a;
+        --muted: #6d8d7c;
+        --green: #12924f;
+        --green-dark: #0c6c39;
+        --turf: #2f8a52;
+        --turf-dark: #247744;
+        --flag: #d33a4e;
+        --sand: #e6d3a3;
+        --gold: #f5c542;
+        --cream: #f4fbf5;
+        --paper: rgba(255, 255, 255, 0.86);
+        --shadow: 0 24px 70px rgba(23, 53, 42, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-height: 100%;
+        background: #cbe6d3;
+      }
+
+      body {
+        min-height: 100svh;
+        margin: 0;
+        color: var(--ink);
+        font-family: "DM Sans", system-ui, sans-serif;
+        background:
+          radial-gradient(circle at 8% 8%, rgba(255, 255, 255, 0.95) 0 5%, transparent 20%),
+          radial-gradient(circle at 92% 18%, rgba(211, 58, 78, 0.16) 0 8%, transparent 27%),
+          linear-gradient(155deg, #f4fbf6 0%, #e2f2e6 49%, #cbe6d3 100%);
+        overflow-x: hidden;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .page-shell {
+        position: relative;
+        display: grid;
+        min-height: 100svh;
+        place-items: center;
+        padding: max(12px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+        isolation: isolate;
+      }
+
+      .page-shell::before,
+      .page-shell::after {
+        position: fixed;
+        z-index: -1;
+        width: 220px;
+        height: 220px;
+        border: 1px solid rgba(18, 146, 79, 0.16);
+        border-radius: 50%;
+        content: "";
+      }
+
+      .page-shell::before {
+        top: -115px;
+        left: -92px;
+        box-shadow: 0 0 0 34px rgba(18, 146, 79, 0.08), 0 0 0 68px rgba(18, 146, 79, 0.05);
+      }
+
+      .page-shell::after {
+        right: -130px;
+        bottom: -100px;
+        box-shadow: 0 0 0 40px rgba(211, 58, 78, 0.07), 0 0 0 80px rgba(211, 58, 78, 0.04);
+      }
+
+      .confetti-piece {
+        position: fixed;
+        z-index: -1;
+        width: 8px;
+        height: 18px;
+        border-radius: 6px;
+        opacity: 0.5;
+        transform: rotate(var(--rotate));
+      }
+
+      .confetti-piece:nth-child(1) { top: 8%; left: 7%; background: var(--green); --rotate: 25deg; }
+      .confetti-piece:nth-child(2) { top: 19%; right: 8%; width: 11px; height: 11px; background: var(--gold); --rotate: 45deg; }
+      .confetti-piece:nth-child(3) { top: 52%; left: 4%; background: var(--flag); --rotate: -25deg; }
+      .confetti-piece:nth-child(4) { right: 5%; bottom: 18%; background: var(--green); --rotate: 65deg; }
+
+      main {
+        width: min(100%, 470px);
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        margin: 0 0 6px;
+        color: var(--green);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.17em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before,
+      .eyebrow::after {
+        width: 28px;
+        height: 1px;
+        background: currentColor;
+        content: "";
+        opacity: 0.45;
+      }
+
+      h1 {
+        max-width: 390px;
+        margin: 0 auto 12px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(2rem, 9vw, 3.4rem);
+        line-height: 0.94;
+        text-align: center;
+        letter-spacing: -0.045em;
+      }
+
+      h1 em {
+        color: var(--green);
+        font-weight: 700;
+      }
+
+      .game-card {
+        padding: clamp(10px, 3vw, 16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 28px;
+        background: var(--paper);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(14px);
+      }
+
+      .scoreboard {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 10px;
+        margin: 2px 3px 10px;
+      }
+
+      .stat {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
+
+      .stat:last-child {
+        justify-content: flex-end;
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 0.69rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .stat-value {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 1.35rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .wave-badge {
+        padding: 7px 11px;
+        border-radius: 999px;
+        color: var(--green-dark);
+        background: rgba(18, 146, 79, 0.1);
+        font-size: 0.7rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      /* Um taco por vida: apagam-se à medida que os ovos acertam. */
+      .lives {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+
+      .life-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 34% 30%, #fff 0 38%, #cfe0d4 62%, #a8bfae 100%);
+        box-shadow: 0 1px 2px rgba(23, 53, 42, 0.28);
+      }
+
+      .life-dot.spent {
+        background: rgba(23, 53, 42, 0.12);
+        box-shadow: none;
+      }
+
+      /*
+       * O campo tem a forma da fotografia (16 × 24 é 2 : 3), por isso os bocados
+       * de relva que as aves destapam encaixam sem esticar nada. A altura manda na
+       * largura, para o jogo caber sempre no ecrã do telemóvel.
+       */
+      .field-wrap {
+        position: relative;
+        display: block;
+        width: min(100%, calc(56svh / 1.5), 320px);
+        margin: 0 auto;
+        aspect-ratio: 2 / 3;
+        overflow: hidden;
+        border-radius: 18px;
+        background: url("./assets/photo.jpg") center / cover no-repeat;
+        box-shadow: inset 0 0 0 1px rgba(23, 53, 42, 0.12);
+        touch-action: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* A relva: 96 bocados que tapam a fotografia, com as listas de quem corta o green. */
+      .turf {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: repeat(var(--turf-cols, 8), 1fr);
+        grid-template-rows: repeat(var(--turf-rows, 12), 1fr);
+      }
+
+      .turf-tile {
+        background: var(--turf);
+        box-shadow: inset 0 0 0 0.5px rgba(12, 108, 57, 0.5);
+        opacity: 0.94;
+        transition: opacity 420ms ease, transform 420ms ease;
+      }
+
+      /* As listas do corte alternam de coluna para coluna, como num green a sério. */
+      .turf-tile[data-stripe="1"] {
+        background: var(--turf-dark);
+      }
+
+      .turf-tile.lifted {
+        opacity: 0;
+        transform: scale(1.08);
+      }
+
+      .sprites {
+        position: absolute;
+        inset: 0;
+      }
+
+      .sprite {
+        position: absolute;
+        filter: drop-shadow(0 2px 3px rgba(9, 40, 26, 0.4));
+        transition: none;
+      }
+
+      .ship svg,
+      .buggy svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* A ave é um bocadinho menor do que a casa dela: assim a revoada respira. */
+      .invader svg {
+        display: block;
+        width: 90%;
+        height: 90%;
+        margin: 5%;
+      }
+
+      /* Duas posições de asa, uma por cada passo da revoada: é o bater das asas. */
+      .invader[data-flap="1"] {
+        transform: scaleX(0.86) scaleY(1.06);
+      }
+
+      .invader.down {
+        transition: transform 240ms ease, opacity 240ms ease;
+        opacity: 0;
+        transform: scale(0.4) rotate(28deg);
+      }
+
+      /* A bola do taco: é ela que sobe e derruba as aves. */
+      .ball {
+        border-radius: 50%;
+        background: radial-gradient(circle at 34% 28%, #fff 0 40%, #dfeae1 66%, #b3c8ba 100%);
+        box-shadow: 0 0 0 1px rgba(23, 53, 42, 0.25);
+      }
+
+      /* O que as aves largam: ovos. */
+      .egg {
+        border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+        background: linear-gradient(170deg, #fdf6e3 0%, #e8d9b4 100%);
+        box-shadow: 0 0 0 1px rgba(84, 62, 26, 0.35);
+      }
+
+      /* Os bunkers: areia que aguenta duas pancadas antes de desaparecer. */
+      .sand {
+        border-radius: 7px;
+        background:
+          radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.7) 0 26%, transparent 60%),
+          linear-gradient(165deg, #f0e2ba 0%, var(--sand) 55%, #d3bd88 100%);
+        box-shadow: 0 1px 2px rgba(23, 53, 42, 0.24);
+        transition: opacity 160ms ease, transform 160ms ease;
+      }
+
+      .sand[data-strength="1"] {
+        border-radius: 50%;
+        opacity: 0.72;
+        transform: scale(0.72);
+      }
+
+      .field-banner {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        color: var(--cream);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(1.3rem, 6vw, 1.8rem);
+        line-height: 1.15;
+        text-align: center;
+        text-shadow: 0 2px 10px rgba(9, 40, 26, 0.7);
+        background: rgba(9, 40, 26, 0.42);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 200ms ease;
+      }
+
+      .field-banner.visible {
+        opacity: 1;
+      }
+
+      .puzzle-preview {
+        position: absolute;
+        inset: 0;
+        z-index: 6;
+        background: url("./assets/photo.jpg") center / cover no-repeat;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(1.025);
+        transition: opacity 180ms ease, transform 180ms ease;
+      }
+
+      .puzzle-preview.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .pause-veil {
+        position: absolute;
+        inset: 0;
+        z-index: 7;
+        display: grid;
+        place-items: center;
+        background: rgba(244, 251, 245, 0.74);
+        color: var(--ink);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 1.5rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 180ms ease;
+        backdrop-filter: blur(3px);
+      }
+
+      .pause-veil.visible {
+        opacity: 1;
+      }
+
+      .pad {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+        grid-template-columns: 1fr 1.5fr 1fr;
+      }
+
+      .pad-button {
+        display: grid;
+        min-height: 48px;
+        place-items: center;
+        border: 0;
+        border-radius: 15px;
+        color: var(--ink);
+        background: #d9ecdf;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 120ms ease, background 120ms ease;
+      }
+
+      .pad-button.hit {
+        color: white;
+        background: var(--green);
+        font-size: 1rem;
+        box-shadow: 0 8px 18px rgba(18, 146, 79, 0.22);
+      }
+
+      .pad-button:active {
+        transform: translateY(2px);
+        background: #c7e2cf;
+      }
+
+      .pad-button.hit:active {
+        background: var(--green-dark);
+      }
+
+      .pad-button[disabled] {
+        box-shadow: none;
+        opacity: 0.45;
+        cursor: default;
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr 46px;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .control-button,
+      .celebration-button {
+        min-height: 46px;
+        font-size: 0.88rem;
+        border: 0;
+        border-radius: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 130ms ease, box-shadow 130ms ease, background 130ms ease;
+      }
+
+      .control-button:active,
+      .celebration-button:active {
+        transform: translateY(2px);
+      }
+
+      .control-button.primary,
+      .celebration-button {
+        color: white;
+        background: var(--green);
+        box-shadow: 0 8px 18px rgba(18, 146, 79, 0.24);
+      }
+
+      .control-button.primary:hover,
+      .celebration-button:hover {
+        background: var(--green-dark);
+      }
+
+      .control-button.secondary {
+        color: var(--ink);
+        background: #d9ecdf;
+      }
+
+      .control-button.icon {
+        padding: 0;
+        font-size: 1.15rem;
+      }
+
+      .control-button[disabled] {
+        box-shadow: none;
+        opacity: 0.45;
+        cursor: default;
+      }
+
+      .pad-button:focus-visible,
+      .control-button:focus-visible,
+      .celebration-button:focus-visible {
+        outline: 3px solid var(--gold);
+        outline-offset: 3px;
+      }
+
+      .hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        margin: 9px 0 1px;
+        color: var(--muted);
+        font-size: 0.73rem;
+        text-align: center;
+      }
+
+      .hint-icon {
+        display: grid;
+        width: 19px;
+        height: 19px;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 1px solid rgba(109, 141, 124, 0.34);
+        border-radius: 50%;
+        font-size: 0.68rem;
+      }
+
+      .celebration {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: grid;
+        place-items: center;
+        padding: 22px;
+        background: rgba(12, 56, 36, 0.34);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 240ms ease;
+      }
+
+      .celebration.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .celebration-card {
+        position: relative;
+        width: min(100%, 390px);
+        padding: 30px 24px 24px;
+        overflow: hidden;
+        border-radius: 30px;
+        background: var(--cream);
+        box-shadow: 0 28px 80px rgba(9, 40, 26, 0.32);
+        text-align: center;
+        transform: translateY(18px) scale(0.96);
+        transition: transform 320ms cubic-bezier(0.22, 0.8, 0.32, 1);
+      }
+
+      .celebration.visible .celebration-card {
+        transform: translateY(0) scale(1);
+      }
+
+      /*
+       * A fotografia inteira também vem para dentro do cartão: é ela o prémio, e
+       * assim vê-se bem mesmo com a festa aberta por cima do campo.
+       */
+      .celebration-photo {
+        position: relative;
+        z-index: 1;
+        display: block;
+        height: 180px;
+        margin: -30px -24px 10px;
+        background: url("./assets/photo.jpg") center 18% / cover no-repeat;
+        box-shadow: inset 0 -1px 0 rgba(23, 53, 42, 0.12);
+      }
+
+      .celebration-emoji {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 2.5rem;
+        animation: bounce 1.2s ease-in-out infinite;
+      }
+
+      .celebration h2 {
+        margin: 0;
+        color: var(--green);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(2rem, 10vw, 3.25rem);
+        line-height: 1;
+        letter-spacing: -0.035em;
+      }
+
+      .celebration p {
+        margin: 14px auto 20px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .celebration-button {
+        width: 100%;
+        font-size: 1rem;
+      }
+
+      .burst {
+        position: absolute;
+        width: 10px;
+        height: 26px;
+        border-radius: 10px;
+        animation: rain 1.8s ease-in infinite;
+      }
+
+      .burst:nth-child(1) { top: -28px; left: 10%; background: var(--green); animation-delay: -0.3s; }
+      .burst:nth-child(2) { top: -28px; left: 29%; background: var(--gold); animation-delay: -1.1s; }
+      .burst:nth-child(3) { top: -28px; left: 51%; background: var(--flag); animation-delay: -0.7s; }
+      .burst:nth-child(4) { top: -28px; right: 26%; background: var(--turf); animation-delay: -1.5s; }
+      .burst:nth-child(5) { top: -28px; right: 8%; background: var(--green); animation-delay: -0.9s; }
+
+      /* O green invadido não é uma derrota — é só um convite a recomeçar. */
+      .celebration.gentle .celebration-card {
+        background: #fff;
+      }
+
+      .celebration.gentle h2 {
+        color: var(--ink);
+        font-size: clamp(1.6rem, 7vw, 2.2rem);
+      }
+
+      .sprite-sheet {
+        position: absolute;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      @keyframes bounce {
+        0%, 100% { transform: rotate(-5deg) translateY(0); }
+        50% { transform: rotate(5deg) translateY(-6px); }
+      }
+
+      @keyframes rain {
+        from { transform: translateY(0) rotate(0); }
+        to { transform: translateY(390px) rotate(260deg); }
+      }
+
+      @media (max-height: 720px) and (orientation: portrait) {
+        .page-shell { padding-top: 8px; padding-bottom: 10px; }
+        .eyebrow { margin-bottom: 4px; }
+        h1 { margin-bottom: 8px; font-size: 1.9rem; }
+        .game-card { padding: 10px; border-radius: 22px; }
+        .scoreboard { margin-bottom: 8px; }
+        .field-wrap { width: min(100%, calc(48svh / 1.5), 320px); }
+        .pad { margin-top: 8px; }
+        .pad-button { min-height: 44px; }
+        .hint { margin-top: 7px; }
+      }
+
+      @media (min-width: 700px) {
+        .page-shell { padding-block: 34px; }
+        h1 { margin-bottom: 20px; }
+        .field-wrap { width: min(100%, calc(62svh / 1.5), 330px); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      As aves do golfe, desenhadas uma vez e usadas tantas vezes quantas as que
+      aparecem em campo: birdie, águia e albatroz — da mais comum à mais rara.
+    -->
+    <svg class="sprite-sheet" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="sprite-birdie" viewBox="0 0 32 32">
+          <g stroke="#5b3a12" stroke-width="1.5" stroke-linejoin="round">
+            <path d="M11 12 1 6l1 12 10-1z" fill="#f0a03c" />
+            <path d="M21 12 31 6l-1 12-10-1z" fill="#f0a03c" />
+            <ellipse cx="16" cy="16" rx="5.6" ry="7" fill="#f7c46a" />
+          </g>
+          <path d="M13.4 20.6h5.2L16 26.4z" fill="#e07b2a" />
+          <circle cx="13.5" cy="13.6" r="1.9" fill="#fff" />
+          <circle cx="18.5" cy="13.6" r="1.9" fill="#fff" />
+          <circle cx="13.6" cy="13.9" r="0.9" fill="#3a2410" />
+          <circle cx="18.4" cy="13.9" r="0.9" fill="#3a2410" />
+        </symbol>
+
+        <symbol id="sprite-aguia" viewBox="0 0 32 32">
+          <g stroke="#4a2f18" stroke-width="1.5" stroke-linejoin="round">
+            <path d="M11 13 0 4l2 8-1 7 10-2z" fill="#8a5a34" />
+            <path d="M21 13 32 4l-2 8 1 7-10-2z" fill="#8a5a34" />
+            <ellipse cx="16" cy="18" rx="5.4" ry="6.6" fill="#7a4c2a" />
+            <circle cx="16" cy="11.4" r="4.9" fill="#f2ede2" />
+          </g>
+          <path d="M13.8 14.6h4.4L16 21.4z" fill="#f5c542" />
+          <circle cx="13.7" cy="10.4" r="1.5" fill="#fff" />
+          <circle cx="18.3" cy="10.4" r="1.5" fill="#fff" />
+          <circle cx="13.8" cy="10.6" r="0.8" fill="#2a1a0c" />
+          <circle cx="18.2" cy="10.6" r="0.8" fill="#2a1a0c" />
+          <path d="M13.6 24.4h4.8L16 30.6z" fill="#5f3a1e" />
+        </symbol>
+
+        <symbol id="sprite-albatroz" viewBox="0 0 32 32">
+          <g stroke="#3d4a52" stroke-width="1.4" stroke-linejoin="round">
+            <path d="M11.4 14C7 10 3 9 0 11l1 5c3.5 1.4 7 1.8 10.4 1.6z" fill="#f4f7f5" />
+            <path d="M20.6 14C25 10 29 9 32 11l-1 5c-3.5 1.4-7 1.8-10.4 1.6z" fill="#f4f7f5" />
+            <ellipse cx="16" cy="17" rx="5.2" ry="7.4" fill="#fbfdfb" />
+          </g>
+          <path d="M1 10.6 5.4 13 4.6 9.2z" fill="#3d4a52" />
+          <path d="M31 10.6 26.6 13l0.8-3.8z" fill="#3d4a52" />
+          <path d="M14.2 21.6h3.6L16 30z" fill="#f0a03c" />
+          <circle cx="13.7" cy="14.4" r="1.7" fill="#fff" />
+          <circle cx="18.3" cy="14.4" r="1.7" fill="#fff" />
+          <circle cx="13.8" cy="14.6" r="0.85" fill="#222c31" />
+          <circle cx="18.2" cy="14.6" r="0.85" fill="#222c31" />
+        </symbol>
+
+        <!-- O buggy que atravessa o cimo do campo: vale o dobro de um albatroz. -->
+        <symbol id="sprite-buggy" viewBox="0 0 48 32">
+          <rect x="6" y="4" width="34" height="3.6" rx="1.8" fill="#d33a4e" />
+          <rect x="8.4" y="7" width="2.6" height="9" rx="1.3" fill="#c9d6cd" />
+          <rect x="35" y="7" width="2.6" height="9" rx="1.3" fill="#c9d6cd" />
+          <path d="M7 16h28l4 6H7z" fill="#f4f7f5" />
+          <rect x="14" y="10.4" width="9" height="6" rx="1.6" fill="#12924f" />
+          <rect x="28" y="9" width="8" height="7.6" rx="1.6" fill="#0c6c39" />
+          <rect x="29.6" y="6.4" width="1.6" height="4" rx="0.8" fill="#c9d6cd" />
+          <rect x="32.4" y="6" width="1.6" height="4.4" rx="0.8" fill="#c9d6cd" />
+          <rect x="5" y="21" width="36" height="3.4" rx="1.7" fill="#0c6c39" />
+          <circle cx="13" cy="26" r="4.6" fill="#22312a" />
+          <circle cx="13" cy="26" r="1.8" fill="#c9d6cd" />
+          <circle cx="33" cy="26" r="4.6" fill="#22312a" />
+          <circle cx="33" cy="26" r="1.8" fill="#c9d6cd" />
+        </symbol>
+
+        <!-- O taco: uma bola em cima do tee, pronta a partir, e o ferro ao lado. -->
+        <symbol id="sprite-taco" viewBox="0 0 48 32">
+          <path d="M8 14 6.4 6" stroke="#9aa8a0" stroke-width="2.2" stroke-linecap="round" />
+          <path d="M4.6 13.4h7.6l1.8 8H3z" fill="#c9d6cd" stroke="#8d9a92" stroke-width="1.2" stroke-linejoin="round" />
+          <path d="M40 14l1.6-8" stroke="#9aa8a0" stroke-width="2.2" stroke-linecap="round" />
+          <path d="M35.8 13.4h7.6l1.8 8h-11.2z" fill="#c9d6cd" stroke="#8d9a92" stroke-width="1.2" stroke-linejoin="round" />
+          <rect x="22.4" y="12" width="3.2" height="10" rx="1.2" fill="#f5c542" />
+          <path d="M20 22h8l-1.4 3h-5.2z" fill="#e0ac2a" />
+          <path d="M4 22h40l2.4 8H1.6z" fill="#0c6c39" />
+          <path d="M4 22h40l0.8 2.6H3.2z" fill="#2f8a52" />
+          <circle cx="24" cy="8.6" r="6.2" fill="#fbfdfb" stroke="#b3c8ba" stroke-width="1.1" />
+          <circle cx="21.8" cy="7.2" r="0.9" fill="#d5e1d8" />
+          <circle cx="25.4" cy="6.6" r="0.9" fill="#d5e1d8" />
+          <circle cx="24.4" cy="10.4" r="0.9" fill="#d5e1d8" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div class="page-shell">
+      <span class="confetti-piece" aria-hidden="true"></span>
+      <span class="confetti-piece" aria-hidden="true"></span>
+      <span class="confetti-piece" aria-hidden="true"></span>
+      <span class="confetti-piece" aria-hidden="true"></span>
+
+      <main>
+        <p class="eyebrow">Um dia muito especial</p>
+        <h1>Parabéns, <em>Adão!</em></h1>
+
+        <section class="game-card" aria-label="Invasores do green">
+          <div class="scoreboard" aria-live="polite">
+            <div class="stat">
+              <span class="stat-label">Pontos</span>
+              <span class="stat-value" id="score">0</span>
+            </div>
+            <span class="wave-badge" id="waveBadge">Vaga 1/4</span>
+            <div class="stat">
+              <span class="stat-label">Tacos</span>
+              <span class="lives" id="lives" role="img" aria-label="Tacos por usar"></span>
+            </div>
+          </div>
+
+          <div class="field-wrap" id="fieldWrap">
+            <div class="turf" id="turf" aria-hidden="true"></div>
+            <div class="sprites" id="field" role="group" aria-label="Campo de golfe, 16 casas por 24"></div>
+            <div class="field-banner" id="banner" aria-hidden="true"></div>
+            <div class="pause-veil" id="pauseVeil" aria-hidden="true">Em pausa</div>
+            <div class="puzzle-preview" id="preview" aria-hidden="true"></div>
+          </div>
+
+          <div class="pad">
+            <button class="pad-button" id="leftButton" type="button" aria-label="Mover o taco para a esquerda">◀</button>
+            <button class="pad-button hit" id="fireButton" type="button">Bater</button>
+            <button class="pad-button" id="rightButton" type="button" aria-label="Mover o taco para a direita">▶</button>
+          </div>
+
+          <div class="controls">
+            <button class="control-button primary" id="startButton" type="button">Começar a jogar</button>
+            <button class="control-button secondary" id="previewButton" type="button" aria-pressed="false">Ver fotografia</button>
+            <button class="control-button secondary icon" id="restartButton" type="button" aria-label="Recomeçar o jogo">↺</button>
+          </div>
+
+          <p class="hint"><span class="hint-icon" aria-hidden="true">🐦</span>Cada ave que cai levanta um bocado de relva.</p>
+          <p class="sr-only" id="status" aria-live="polite"></p>
+        </section>
+      </main>
+    </div>
+
+    <div class="celebration" id="celebration" role="dialog" aria-modal="true" aria-labelledby="celebrationTitle" aria-hidden="true">
+      <div class="celebration-card">
+        <i class="burst" aria-hidden="true"></i>
+        <i class="burst" aria-hidden="true"></i>
+        <i class="burst" aria-hidden="true"></i>
+        <i class="burst" aria-hidden="true"></i>
+        <i class="burst" aria-hidden="true"></i>
+        <span class="celebration-photo" role="img" aria-label="Fotografia do Adão, já inteira"></span>
+        <span class="celebration-emoji" aria-hidden="true">🎂</span>
+        <h2 id="celebrationTitle">Green limpo</h2>
+        <p id="celebrationText">Muitos parabéns, Adão! Que este novo ano te traga tacadas certeiras, greens macios e o dezoito sempre à vista.</p>
+        <button class="celebration-button" id="playAgainButton" type="button">Jogar outra vez</button>
+      </div>
+    </div>
+
+    <div class="celebration gentle" id="gameOver" role="dialog" aria-modal="true" aria-labelledby="gameOverTitle" aria-hidden="true">
+      <div class="celebration-card">
+        <span class="celebration-emoji" aria-hidden="true">🐦</span>
+        <h2 id="gameOverTitle">As aves tomaram o green</h2>
+        <p id="gameOverText">Faltavam poucas aves. Recomeça e a fotografia aparece toda.</p>
+        <button class="celebration-button" id="tryAgainButton" type="button">Tentar outra vez</button>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        "use strict";
+
+        // Tudo o que muda de puzzle para puzzle vive aqui.
+        const PUZZLE = {
+          name: "Adão",
+          wish: "Que este novo ano te traga tacadas certeiras, greens macios e o dezoito sempre à vista.",
+        };
+
+        // O campo tem a forma da fotografia: 16 × 24 é 2 : 3, tal como ela.
+        const COLS = 16;
+        const ROWS = 24;
+
+        // E a relva que a tapa é a mesma forma em casas maiores: 8 × 12 dá 96 bocados.
+        const TURF_COLS = 8;
+        const TURF_ROWS = 12;
+
+        /*
+         * Quatro vagas de 6 × 4 aves dão exactamente 96 aves — uma por cada bocado
+         * de relva. Derrubada a última, não sobra relva nenhuma por levantar.
+         */
+        const WAVES = 4;
+        const FLIGHT_COLS = 6;
+        const FLIGHT_ROWS = 4;
+        const FLIGHT_SIZE = FLIGHT_COLS * FLIGHT_ROWS;
+        const SPACING = 2;        // as aves ocupam duas casas e vão de duas em duas
+        const BIRD_SIZE = 2;
+
+        const SHIP_ROW = 22;
+        const SHIP_WIDTH = 3;
+        const SHIP_HEIGHT = 2;
+        const LIVES = 3;
+        const LANDING_ROW = 20;   // uma ave aqui e o green está perdido
+
+        const TICK = 30;          // milissegundos de cada passo do jogo
+        const BALL_SPEED = 0.9;   // casas por passo
+        const EGG_SPEED = 0.26;
+        const BUGGY_SPEED = 0.11;
+        const MARCH_SLOW = 620;   // milissegundos entre passos, com a revoada toda de pé
+        const MARCH_FAST = 95;
+        const EGG_CHANCE = 0.011; // por passo, e sobe a cada vaga
+        const MAX_EGGS = 3;
+        const BUGGY_CHANCE = 0.0016;
+        const BUGGY_POINTS = 60;
+        const WAVE_PAUSE = 1300;
+        const HIT_PAUSE = 900;
+        const PARTY_WAIT = 2200;
+
+        /*
+         * As três aves do golfe, uma por linha da revoada e da mais rara para a
+         * mais comum — é o albatroz que vem à frente e o que mais vale.
+         */
+        const RANKS = [
+          { kind: "albatroz", points: 30, label: "albatroz" },
+          { kind: "aguia", points: 20, label: "águia" },
+          { kind: "birdie", points: 10, label: "birdie" },
+          { kind: "birdie", points: 10, label: "birdie" },
+        ];
+
+        // Três bunkers de areia entre as aves e o taco, cada bloco com duas camadas.
+        const BUNKERS = [1, 6, 11];
+        const BUNKER_COLS = 3;
+        const BUNKER_ROWS = 2;
+        const BUNKER_TOP = 17;
+        const SAND_LAYERS = 2;
+
+        const SYMBOLS = {
+          birdie: { id: "sprite-birdie", box: "0 0 32 32" },
+          aguia: { id: "sprite-aguia", box: "0 0 32 32" },
+          albatroz: { id: "sprite-albatroz", box: "0 0 32 32" },
+          buggy: { id: "sprite-buggy", box: "0 0 48 32" },
+          taco: { id: "sprite-taco", box: "0 0 48 32" },
+        };
+
+        const fieldWrap = document.querySelector("#fieldWrap");
+        const field = document.querySelector("#field");
+        const turfLayer = document.querySelector("#turf");
+        const banner = document.querySelector("#banner");
+        const scoreValue = document.querySelector("#score");
+        const waveBadge = document.querySelector("#waveBadge");
+        const livesBox = document.querySelector("#lives");
+        const status = document.querySelector("#status");
+        const preview = document.querySelector("#preview");
+        const pauseVeil = document.querySelector("#pauseVeil");
+        const previewButton = document.querySelector("#previewButton");
+        const startButton = document.querySelector("#startButton");
+        const restartButton = document.querySelector("#restartButton");
+        const leftButton = document.querySelector("#leftButton");
+        const rightButton = document.querySelector("#rightButton");
+        const fireButton = document.querySelector("#fireButton");
+        const celebration = document.querySelector("#celebration");
+        const celebrationText = document.querySelector("#celebrationText");
+        const playAgainButton = document.querySelector("#playAgainButton");
+        const gameOver = document.querySelector("#gameOver");
+        const gameOverText = document.querySelector("#gameOverText");
+        const tryAgainButton = document.querySelector("#tryAgainButton");
+        const padButtons = [leftButton, fireButton, rightButton];
+
+        const tiles = [];
+        let birds = [];
+        let sand = [];
+        let eggs = [];
+        let ball = null;
+        let buggy = null;
+        let ship = null;
+
+        let state = "ready";      // ready · playing · paused · wave · won · lost
+        let wave = 0;
+        let score = 0;
+        let kills = 0;
+        let lives = LIVES;
+        let shipCol = 0;
+        let flightX = 2;
+        let flightY = 2;
+        let marchDir = 1;
+        let marchClock = 0;
+        let flap = 0;
+        let elapsed = 0;
+        let loopId = null;
+        let pending = [];         // esperas por cumprir, para o recomeço as apagar
+
+        const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
+        const pct = (value, span) => `${(value / span) * 100}%`;
+        const seconds = () => Math.floor(elapsed / 1000);
+        const birdCol = (bird) => flightX + bird.slot * SPACING;
+        const birdRow = (bird) => flightY + bird.rank * SPACING;
+        const liveBirds = () => birds.filter((bird) => bird.alive);
+
+        function formatTime(value) {
+          const minutes = Math.floor(value / 60);
+          return `${minutes}:${String(value % 60).padStart(2, "0")}`;
+        }
+
+        function announce(message) {
+          status.textContent = "";
+          later(() => { status.textContent = message; }, 20);
+        }
+
+        /** Uma espera que o recomeço sabe apagar, para não haver ecos do jogo anterior. */
+        function later(action, delay) {
+          const id = window.setTimeout(() => {
+            pending = pending.filter((other) => other !== id);
+            action();
+          }, delay);
+          pending.push(id);
+          return id;
+        }
+
+        function forgetWaits() {
+          pending.forEach((id) => window.clearTimeout(id));
+          pending = [];
+        }
+
+        function sprite(className, wide, tall, kind) {
+          const element = document.createElement("div");
+          element.className = `sprite ${className}`;
+          element.style.width = pct(wide, COLS);
+          element.style.height = pct(tall, ROWS);
+          if (kind) {
+            const symbol = SYMBOLS[kind];
+            element.innerHTML =
+              `<svg viewBox="${symbol.box}" aria-hidden="true"><use href="#${symbol.id}"></use></svg>`;
+          }
+          field.appendChild(element);
+          return element;
+        }
+
+        /* ---------------------------------------------------------------- campo */
+
+        function buildTurf() {
+          turfLayer.style.setProperty("--turf-cols", String(TURF_COLS));
+          turfLayer.style.setProperty("--turf-rows", String(TURF_ROWS));
+          for (let index = 0; index < TURF_COLS * TURF_ROWS; index += 1) {
+            const col = index % TURF_COLS;
+            const row = Math.floor(index / TURF_COLS);
+            const element = document.createElement("div");
+            element.className = "turf-tile";
+            // As listas do corte alternam de coluna para coluna, como num green a sério.
+            element.dataset.stripe = String(col % 2);
+            element.dataset.col = String(col);
+            element.dataset.row = String(row);
+            element.dataset.lifted = "0";
+            turfLayer.appendChild(element);
+            tiles.push({ col, row, element, lifted: false });
+          }
+        }
+
+        /**
+         * Levanta o bocado de relva mais perto de onde a ave caiu. Como há tantas
+         * aves como bocados, no fim da última vaga não sobra nenhum por levantar.
+         */
+        function liftTurf(x, y) {
+          const wantCol = clamp(Math.floor((x / COLS) * TURF_COLS), 0, TURF_COLS - 1);
+          const wantRow = clamp(Math.floor((y / ROWS) * TURF_ROWS), 0, TURF_ROWS - 1);
+          let best = null;
+          tiles.forEach((tile) => {
+            if (tile.lifted) return;
+            const distance = (tile.col - wantCol) ** 2 + (tile.row - wantRow) ** 2;
+            if (best === null || distance < best.distance) best = { tile, distance };
+          });
+          if (best) lift(best.tile);
+        }
+
+        function lift(tile) {
+          tile.lifted = true;
+          tile.element.classList.add("lifted");
+          tile.element.dataset.lifted = "1";
+        }
+
+        function buildBunkers() {
+          sand.forEach((block) => block.element.remove());
+          sand = [];
+          BUNKERS.forEach((start) => {
+            for (let row = 0; row < BUNKER_ROWS; row += 1) {
+              for (let col = 0; col < BUNKER_COLS; col += 1) {
+                const block = {
+                  col: start + col,
+                  row: BUNKER_TOP + row,
+                  strength: SAND_LAYERS,
+                  element: sprite("sand", 1, 1, null),
+                };
+                // A areia não se mexe: fica onde é posta, e só se gasta.
+                block.element.style.left = pct(block.col, COLS);
+                block.element.style.top = pct(block.row, ROWS);
+                block.element.dataset.col = String(block.col);
+                block.element.dataset.row = String(block.row);
+                block.element.dataset.strength = String(block.strength);
+                sand.push(block);
+              }
+            }
+          });
+        }
+
+        function wearSand(block) {
+          block.strength -= 1;
+          if (block.strength <= 0) {
+            block.element.remove();
+            sand = sand.filter((other) => other !== block);
+            return;
+          }
+          block.element.dataset.strength = String(block.strength);
+        }
+
+        /* ---------------------------------------------------------------- revoada */
+
+        function startWave() {
+          birds.forEach((bird) => bird.element.remove());
+          birds = [];
+          flightX = 2;
+          // Cada vaga começa um bocadinho mais perto do green do que a anterior.
+          flightY = 2 + wave;
+          marchDir = 1;
+          marchClock = 0;
+          flap = 0;
+
+          for (let rank = 0; rank < FLIGHT_ROWS; rank += 1) {
+            for (let slot = 0; slot < FLIGHT_COLS; slot += 1) {
+              const { kind, points } = RANKS[rank];
+              const bird = {
+                slot,
+                rank,
+                kind,
+                points,
+                alive: true,
+                element: sprite(`invader ${kind}`, BIRD_SIZE, BIRD_SIZE, kind),
+              };
+              bird.element.dataset.kind = kind;
+              bird.element.dataset.alive = "1";
+              birds.push(bird);
+            }
+          }
+          buildBunkers();
+        }
+
+        /** Quanto menos aves restam, mais depressa a revoada avança. */
+        function marchDelay() {
+          const slow = Math.max(MARCH_FAST + 70, MARCH_SLOW - wave * 90);
+          const share = (liveBirds().length - 1) / (FLIGHT_SIZE - 1);
+          return MARCH_FAST + (slow - MARCH_FAST) * Math.max(0, share);
+        }
+
+        function march() {
+          const live = liveBirds();
+          if (live.length === 0) return;
+
+          const slots = live.map((bird) => bird.slot);
+          const leftSlot = Math.min(...slots);
+          const rightSlot = Math.max(...slots);
+          const next = flightX + marchDir;
+
+          if (next + leftSlot * SPACING < 0 || next + rightSlot * SPACING + BIRD_SIZE > COLS) {
+            // Bateram na berma do campo: viram costas e descem uma casa.
+            marchDir *= -1;
+            flightY += 1;
+            crushSand();
+            if (Math.max(...live.map((bird) => birdRow(bird))) + BIRD_SIZE > LANDING_ROW) {
+              loseGame("As aves pousaram no green.");
+              return;
+            }
+          } else {
+            flightX = next;
+          }
+          flap = flap ? 0 : 1;
+        }
+
+        /** A revoada não faz cerimónia com a areia: passa por cima dela. */
+        function crushSand() {
+          const live = liveBirds();
+          sand
+            .filter((block) =>
+              live.some(
+                (bird) =>
+                  block.col >= birdCol(bird) &&
+                  block.col < birdCol(bird) + BIRD_SIZE &&
+                  block.row >= birdRow(bird) &&
+                  block.row < birdRow(bird) + BIRD_SIZE,
+              ),
+            )
+            .forEach((block) => {
+              block.element.remove();
+              sand = sand.filter((other) => other !== block);
+            });
+        }
+
+        /* ---------------------------------------------------------------- tacadas */
+
+        /** Uma bola de cada vez no ar — é o taco que a manda, e só tem um. */
+        function fire() {
+          if (state === "ready") begin();
+          if (state !== "playing" || ball) return false;
+          ball = { col: shipCol + 1, row: SHIP_ROW - 1, element: sprite("ball", 1, 1, null) };
+          render();
+          return true;
+        }
+
+        function dropBall() {
+          if (!ball) return;
+          ball.element.remove();
+          ball = null;
+        }
+
+        function advanceBall() {
+          if (!ball) return;
+          ball.row -= BALL_SPEED;
+
+          if (ball.row < -1) {
+            dropBall();
+            return;
+          }
+
+          const block = sand.find(
+            (piece) => piece.col === ball.col && Math.abs(piece.row - ball.row) < 0.7,
+          );
+          if (block) {
+            wearSand(block);
+            dropBall();
+            return;
+          }
+
+          if (buggy && ball.row <= BIRD_SIZE) {
+            const left = Math.round(buggy.col);
+            if (ball.col >= left && ball.col < left + SHIP_WIDTH) {
+              score += BUGGY_POINTS;
+              announce(`Buggy apanhado: mais ${BUGGY_POINTS} pontos.`);
+              buggy.element.remove();
+              buggy = null;
+              dropBall();
+              updateStats();
+              return;
+            }
+          }
+
+          // Entre duas aves na mesma coluna, leva a mais baixa — a que vem à frente.
+          const hit = liveBirds()
+            .filter(
+              (bird) =>
+                ball.col >= birdCol(bird) &&
+                ball.col < birdCol(bird) + BIRD_SIZE &&
+                ball.row <= birdRow(bird) + BIRD_SIZE - 0.4 &&
+                ball.row >= birdRow(bird) - 0.4,
+            )
+            .sort((one, other) => birdRow(other) - birdRow(one))[0];
+
+          if (hit) {
+            dropBall();
+            knockDown(hit);
+          }
+        }
+
+        function knockDown(bird) {
+          bird.alive = false;
+          bird.element.dataset.alive = "0";
+          bird.element.classList.add("down");
+          const fallen = bird.element;
+          later(() => fallen.remove(), 260);
+
+          score += bird.points;
+          kills += 1;
+          liftTurf(birdCol(bird) + BIRD_SIZE / 2, birdRow(bird) + BIRD_SIZE / 2);
+          updateStats();
+
+          if (liveBirds().length === 0) finishWave();
+        }
+
+        /* ------------------------------------------------------------------- ovos */
+
+        function maybeDropEgg() {
+          if (eggs.length >= MAX_EGGS) return;
+          if (Math.random() > EGG_CHANCE * (1 + wave * 0.35)) return;
+
+          const live = liveBirds();
+          if (live.length === 0) return;
+          const bird = live[Math.floor(Math.random() * live.length)];
+          // Só a ave da frente é que larga: as de trás acertariam nas da frente.
+          const front = Math.max(
+            ...live.filter((other) => other.slot === bird.slot).map((other) => birdRow(other)),
+          );
+          const egg = {
+            col: birdCol(bird) + (Math.random() < 0.5 ? 0 : 1),
+            row: front + BIRD_SIZE,
+            element: sprite("egg", 1, 1, null),
+          };
+          eggs.push(egg);
+        }
+
+        function dropEgg(egg) {
+          egg.element.remove();
+          eggs = eggs.filter((other) => other !== egg);
+        }
+
+        function advanceEggs() {
+          [...eggs].forEach((egg) => {
+            egg.row += EGG_SPEED;
+
+            if (egg.row > ROWS) {
+              dropEgg(egg);
+              return;
+            }
+
+            const block = sand.find(
+              (piece) => piece.col === egg.col && Math.abs(piece.row - egg.row) < 0.7,
+            );
+            if (block) {
+              wearSand(block);
+              dropEgg(egg);
+              return;
+            }
+
+            if (
+              egg.col >= shipCol &&
+              egg.col < shipCol + SHIP_WIDTH &&
+              egg.row >= SHIP_ROW - 0.3 &&
+              egg.row <= SHIP_ROW + SHIP_HEIGHT
+            ) {
+              dropEgg(egg);
+              loseLife();
+            }
+          });
+        }
+
+        /* ------------------------------------------------------------------ buggy */
+
+        function maybeSendBuggy() {
+          if (buggy || Math.random() > BUGGY_CHANCE) return;
+          const fromLeft = Math.random() < 0.5;
+          buggy = {
+            col: fromLeft ? -SHIP_WIDTH : COLS,
+            dir: fromLeft ? 1 : -1,
+            element: sprite("buggy", SHIP_WIDTH, BIRD_SIZE, "buggy"),
+          };
+        }
+
+        function advanceBuggy() {
+          if (!buggy) return;
+          buggy.col += BUGGY_SPEED * buggy.dir;
+          if (buggy.col < -SHIP_WIDTH - 1 || buggy.col > COLS + 1) {
+            buggy.element.remove();
+            buggy = null;
+          }
+        }
+
+        /* ------------------------------------------------------------------- taco */
+
+        function move(step) {
+          if (state === "ready") begin();
+          if (state !== "playing") return false;
+          const wanted = clamp(shipCol + step, 0, COLS - SHIP_WIDTH);
+          if (wanted === shipCol) return false;
+          shipCol = wanted;
+          render();
+          return true;
+        }
+
+        /** No telemóvel o taco segue o dedo, e ao levantá-lo bate na bola. */
+        function aimAt(clientX) {
+          if (state === "ready") begin();
+          if (state !== "playing") return;
+          const box = fieldWrap.getBoundingClientRect();
+          if (!box.width) return;
+          const cell = box.width / COLS;
+          shipCol = clamp(
+            Math.round((clientX - box.left) / cell - SHIP_WIDTH / 2),
+            0,
+            COLS - SHIP_WIDTH,
+          );
+          render();
+        }
+
+        /* ------------------------------------------------------------------ jogo */
+
+        function tick() {
+          if (state !== "playing") return;
+          elapsed += TICK;
+
+          advanceBall();
+          if (state !== "playing") { render(); return; }
+
+          advanceEggs();
+          if (state !== "playing") { render(); return; }
+
+          marchClock += TICK;
+          if (marchClock >= marchDelay()) {
+            marchClock = 0;
+            march();
+          }
+          if (state !== "playing") { render(); return; }
+
+          advanceBuggy();
+          maybeDropEgg();
+          maybeSendBuggy();
+          render();
+        }
+
+        function startLoop() {
+          if (loopId) return;
+          loopId = window.setInterval(tick, TICK);
+        }
+
+        function stopLoop() {
+          window.clearInterval(loopId);
+          loopId = null;
+        }
+
+        function begin() {
+          if (state !== "ready") return;
+          state = "playing";
+          startButton.textContent = "Pausar";
+          startLoop();
+          announce("A revoada chegou ao green.");
+        }
+
+        /* Depois de o jogo começar, o mesmo botão serve para parar e retomar. */
+        function togglePause() {
+          if (state === "ready") {
+            begin();
+            render();
+            return;
+          }
+          if (state === "playing") {
+            state = "paused";
+            stopLoop();
+            pauseVeil.classList.add("visible");
+            startButton.textContent = "Continuar";
+            setPad(false);
+            announce("Jogo em pausa.");
+          } else if (state === "paused") {
+            state = "playing";
+            startLoop();
+            pauseVeil.classList.remove("visible");
+            startButton.textContent = "Pausar";
+            setPad(true);
+            announce("A jogar outra vez.");
+          }
+          render();
+        }
+
+        function clearShots() {
+          dropBall();
+          [...eggs].forEach(dropEgg);
+        }
+
+        function finishWave() {
+          clearShots();
+          if (wave + 1 >= WAVES) {
+            winGame();
+            return;
+          }
+          state = "wave";
+          showBanner(`Vaga ${wave + 2}`);
+          announce(`Vaga ${wave + 1} limpa.`);
+          later(() => {
+            if (state !== "wave") return;
+            wave += 1;
+            startWave();
+            hideBanner();
+            state = "playing";
+            updateStats();
+            render();
+          }, WAVE_PAUSE);
+          render();
+        }
+
+        function loseLife() {
+          lives -= 1;
+          clearShots();
+          updateStats();
+
+          if (lives <= 0) {
+            loseGame("Os ovos partiram os três tacos.");
+            return;
+          }
+
+          state = "wave";
+          showBanner("Taco partido");
+          announce(`Um ovo acertou no taco. Ficam ${lives}.`);
+          later(() => {
+            if (state !== "wave") return;
+            shipCol = Math.floor((COLS - SHIP_WIDTH) / 2);
+            hideBanner();
+            state = "playing";
+            render();
+          }, HIT_PAUSE);
+          render();
+        }
+
+        function winGame() {
+          state = "won";
+          stopLoop();
+          clearShots();
+          if (buggy) {
+            buggy.element.remove();
+            buggy = null;
+          }
+          sand.forEach((block) => block.element.remove());
+          sand = [];
+          // Não deve sobrar relva nenhuma, mas se sobrar, levanta-se também.
+          tiles.filter((tile) => !tile.lifted).forEach(lift);
+          hideBanner();
+          startButton.textContent = "Está feito!";
+          startButton.disabled = true;
+          setPad(false);
+          updateStats();
+          render();
+
+          celebrationText.textContent =
+            `Derrubaste as ${kills} aves das ${WAVES} vagas, fizeste ${score} pontos em ${formatTime(seconds())} e a fotografia ficou inteira. Muitos parabéns, ${PUZZLE.name}! ${PUZZLE.wish}`;
+          announce("Green limpo. Parabéns!");
+          // Um compasso de espera antes da festa, para se ver o campo já todo fotografia.
+          later(() => showOverlay(celebration, playAgainButton), PARTY_WAIT);
+          playChime();
+        }
+
+        function loseGame(reason) {
+          state = "lost";
+          stopLoop();
+          clearShots();
+          hideBanner();
+          startButton.textContent = "Fim de jogo";
+          startButton.disabled = true;
+          setPad(false);
+          updateStats();
+          render();
+
+          const missing = TURF_COLS * TURF_ROWS - kills;
+          gameOverText.textContent =
+            `${reason} Derrubaste ${kills} ${kills === 1 ? "ave" : "aves"}: ${missing === 1 ? "faltava uma" : `faltavam ${missing}`} para a fotografia ficar inteira. Recomeça, ${PUZZLE.name}!`;
+          announce("O green foi tomado.");
+          later(() => showOverlay(gameOver, tryAgainButton), 500);
+        }
+
+        /* ------------------------------------------------------------------ ecrã */
+
+        function render() {
+          ship.style.left = pct(shipCol, COLS);
+          ship.dataset.col = String(shipCol);
+
+          birds.forEach((bird) => {
+            if (!bird.alive) return;
+            bird.element.style.left = pct(birdCol(bird), COLS);
+            bird.element.style.top = pct(birdRow(bird), ROWS);
+            bird.element.dataset.col = String(birdCol(bird));
+            bird.element.dataset.row = String(birdRow(bird));
+            bird.element.dataset.flap = String(flap);
+          });
+
+          if (ball) {
+            ball.element.style.left = pct(ball.col, COLS);
+            ball.element.style.top = pct(ball.row, ROWS);
+            ball.element.dataset.col = String(ball.col);
+            ball.element.dataset.row = ball.row.toFixed(2);
+          }
+
+          eggs.forEach((egg) => {
+            egg.element.style.left = pct(egg.col, COLS);
+            egg.element.style.top = pct(egg.row, ROWS);
+            egg.element.dataset.col = String(egg.col);
+            egg.element.dataset.row = egg.row.toFixed(2);
+          });
+
+          if (buggy) {
+            buggy.element.style.left = pct(buggy.col, COLS);
+            buggy.element.style.top = pct(0, ROWS);
+          }
+
+          // O estado do jogo fica escrito no campo: é por aqui que os testes
+          // (e quem espreitar o HTML) sabem em que pé vai a partida.
+          field.dataset.state = state;
+          field.dataset.wave = String(wave + 1);
+          field.dataset.lives = String(Math.max(0, lives));
+          field.dataset.kills = String(kills);
+          field.dataset.score = String(score);
+        }
+
+        function updateStats() {
+          scoreValue.textContent = String(score);
+          waveBadge.textContent = `Vaga ${Math.min(wave + 1, WAVES)}/${WAVES}`;
+          [...livesBox.children].forEach((dot, index) => {
+            dot.classList.toggle("spent", index >= lives);
+          });
+          livesBox.setAttribute(
+            "aria-label",
+            `${Math.max(0, lives)} ${lives === 1 ? "taco" : "tacos"} por usar`,
+          );
+        }
+
+        function showBanner(text) {
+          banner.textContent = text;
+          banner.classList.add("visible");
+        }
+
+        function hideBanner() {
+          banner.classList.remove("visible");
+        }
+
+        function setPad(enabled) {
+          padButtons.forEach((button) => { button.disabled = !enabled; });
+        }
+
+        function showOverlay(overlay, focusTarget) {
+          overlay.classList.add("visible");
+          overlay.setAttribute("aria-hidden", "false");
+          focusTarget.focus();
+        }
+
+        function hideOverlays() {
+          [celebration, gameOver].forEach((overlay) => {
+            overlay.classList.remove("visible");
+            overlay.setAttribute("aria-hidden", "true");
+          });
+        }
+
+        function setPreview(visible) {
+          preview.classList.toggle("visible", visible);
+          previewButton.setAttribute("aria-pressed", String(visible));
+          previewButton.textContent = visible ? "Voltar ao jogo" : "Ver fotografia";
+        }
+
+        function restart() {
+          forgetWaits();
+          stopLoop();
+          hideOverlays();
+          hideBanner();
+          clearShots();
+          if (buggy) {
+            buggy.element.remove();
+            buggy = null;
+          }
+          birds.forEach((bird) => bird.element.remove());
+          birds = [];
+          tiles.forEach((tile) => {
+            tile.lifted = false;
+            tile.element.classList.remove("lifted");
+            tile.element.dataset.lifted = "0";
+          });
+
+          state = "ready";
+          wave = 0;
+          score = 0;
+          kills = 0;
+          lives = LIVES;
+          elapsed = 0;
+          shipCol = Math.floor((COLS - SHIP_WIDTH) / 2);
+
+          pauseVeil.classList.remove("visible");
+          startButton.textContent = "Começar a jogar";
+          startButton.disabled = false;
+          setPad(true);
+          startWave();
+          updateStats();
+          render();
+          announce("Green limpo e revoada à vista. Boa sorte!");
+        }
+
+        function playChime() {
+          try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const audio = new AudioContext();
+            const notes = [523.25, 659.25, 783.99];
+            notes.forEach((frequency, index) => {
+              const oscillator = audio.createOscillator();
+              const gain = audio.createGain();
+              oscillator.frequency.value = frequency;
+              gain.gain.setValueAtTime(0, audio.currentTime + index * 0.12);
+              gain.gain.linearRampToValueAtTime(0.12, audio.currentTime + index * 0.12 + 0.02);
+              gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + index * 0.12 + 0.4);
+              oscillator.connect(gain).connect(audio.destination);
+              oscillator.start(audio.currentTime + index * 0.12);
+              oscillator.stop(audio.currentTime + index * 0.12 + 0.42);
+            });
+            window.setTimeout(() => audio.close(), 900);
+          } catch (_) {
+            // O som é um extra: sem ele o jogo joga-se na mesma.
+          }
+        }
+
+        function buildField() {
+          buildTurf();
+          for (let index = 0; index < LIVES; index += 1) {
+            const dot = document.createElement("span");
+            dot.className = "life-dot";
+            livesBox.appendChild(dot);
+          }
+          ship = sprite("ship", SHIP_WIDTH, SHIP_HEIGHT, "taco");
+          ship.style.top = pct(SHIP_ROW, ROWS);
+        }
+
+        /* -------------------------------------------------------------- comandos */
+
+        leftButton.addEventListener("click", () => move(-1));
+        rightButton.addEventListener("click", () => move(1));
+        fireButton.addEventListener("click", fire);
+        startButton.addEventListener("click", togglePause);
+        restartButton.addEventListener("click", restart);
+        previewButton.addEventListener("click", () => setPreview(!preview.classList.contains("visible")));
+        playAgainButton.addEventListener("click", () => {
+          restart();
+          startButton.focus();
+        });
+        tryAgainButton.addEventListener("click", () => {
+          restart();
+          startButton.focus();
+        });
+
+        [celebration, gameOver].forEach((overlay) => {
+          overlay.addEventListener("click", (event) => {
+            if (event.target === overlay) hideOverlays();
+          });
+        });
+
+        document.addEventListener("keydown", (event) => {
+          const keys = {
+            ArrowLeft: () => move(-1),
+            ArrowRight: () => move(1),
+            ArrowUp: fire,
+            " ": fire,
+            Escape: () => { setPreview(false); hideOverlays(); },
+          };
+          const action = keys[event.key];
+          if (!action) return;
+          event.preventDefault();
+          action();
+        });
+
+        /*
+         * Com o dedo por cima do campo o taco segue-o, e ao levantá-lo é que a
+         * bola parte: aponta-se com calma e bate-se quando se quer.
+         */
+        let touching = false;
+        fieldWrap.addEventListener("touchstart", (event) => {
+          touching = true;
+          aimAt(event.changedTouches[0].clientX);
+        }, { passive: true });
+
+        fieldWrap.addEventListener("touchmove", (event) => {
+          if (touching) aimAt(event.changedTouches[0].clientX);
+        }, { passive: true });
+
+        fieldWrap.addEventListener("touchend", () => {
+          if (!touching) return;
+          touching = false;
+          fire();
+        }, { passive: true });
+
+        buildField();
+        restart();
+      })();
+    </script>
+  </body>
+</html>
